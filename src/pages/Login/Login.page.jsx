@@ -9,6 +9,7 @@ function LoginPage() {
   const history = useHistory();
 
   function authenticate(event) {
+    console.log(event);
     event.preventDefault();
     login();
     history.push('/secret');

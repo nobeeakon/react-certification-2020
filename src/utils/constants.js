@@ -1,3 +1,5 @@
 const AUTH_STORAGE_KEY = 'wa_cert_authenticated';
 
-export { AUTH_STORAGE_KEY };
+const DARK_MODE_KEY = 'is_dark_mode_on';
+
+export { AUTH_STORAGE_KEY, DARK_MODE_KEY };
