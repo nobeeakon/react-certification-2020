@@ -7,9 +7,9 @@ import ThemeProvider from '../../providers/Theme';
 import DarkModeProvider from '../../providers/DarkMode';
 
 describe('Testing VideoCard.component', () => {
-  const mockedGoToVideo = jest.fn(() => {});
-
   describe('VideoCard renders when missing props', () => {
+    const mockedGoToVideo = jest.fn(() => {});
+
     test('renders when props.title is null', () => {
       const video = {};
       const { container } = render(
@@ -76,6 +76,8 @@ describe('Testing VideoCard.component', () => {
 
   // since sometimes API returns coded strings
   describe('VideoCard shown texts are decoded', () => {
+    const mockedGoToVideo = jest.fn(() => {});
+
     const codedString = 'Wizeline&#39;s';
     test('title gets decoded', () => {
       const { container } = render(
@@ -139,6 +141,8 @@ describe('Testing VideoCard.component', () => {
   });
 
   describe('Testing VideoCard onClick handler', () => {
+    const mockedGoToVideo = jest.fn(() => {});
+
     it('calls goToVideoHandler when VideoCard is clicked', () => {
       const { getByText } = render(
         <BrowserRouter>
