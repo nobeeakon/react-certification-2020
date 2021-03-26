@@ -4,16 +4,11 @@ import { render, fireEvent, screen } from '@testing-library/react';
 import NavBar from './NavBar.component';
 import DarThemeProvider from '../../providers/DarkMode';
 import AuthProvider from '../../providers/Auth';
-<<<<<<< HEAD
 
 import { storage } from '../../utils/storage';
 
 import { DARK_MODE_KEY } from '../../utils/constants';
 
-=======
-import { storage } from '../../utils/storage';
-
->>>>>>> 058232c35ecda9d98bd2dfc6ecaf1ed77d407084
 jest.mock('../../utils/storage');
 
 describe('Testing NavBar.component', () => {
