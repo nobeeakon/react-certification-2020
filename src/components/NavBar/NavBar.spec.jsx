@@ -4,13 +4,16 @@ import { render, fireEvent, screen } from '@testing-library/react';
 import NavBar from './NavBar.component';
 import DarThemeProvider from '../../providers/DarkMode';
 import AuthProvider from '../../providers/Auth';
+
 import { storage } from '../../utils/storage';
+
+import { DARK_MODE_KEY } from '../../utils/constants';
 
 jest.mock('../../utils/storage');
 
 describe('Testing NavBar.component', () => {
   test('toggleDarkmode when click toggle button', () => {
-    const { container } = render(
+    const { getByTestId } = render(
       <AuthProvider>
         <DarThemeProvider>
           <NavBar />
@@ -18,12 +21,12 @@ describe('Testing NavBar.component', () => {
       </AuthProvider>
     );
 
-    const darkModeToggle = container.querySelector('#toggleTheme');
+    const darkModeToggle = getByTestId('toggleTheme-button');
     fireEvent.click(darkModeToggle);
 
-    expect(storage.set).toHaveBeenCalledTimes(1);
+    expect(storage.set).toHaveBeenNthCalledWith(1, DARK_MODE_KEY, false);
     fireEvent.click(darkModeToggle);
-    expect(storage.set).toHaveBeenCalledTimes(2);
+    expect(storage.set).toHaveBeenNthCalledWith(2, DARK_MODE_KEY, true);
   });
 
   test('Search value should change when input', () => {
