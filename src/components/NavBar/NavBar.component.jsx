@@ -87,7 +87,7 @@ const NavBar = () => {
             )}
           </LeftSideLi>
           <li>
-            <ToggleDark id="toggleTheme" onClick={toggleTheme}>
+            <ToggleDark data-testid="toggleTheme-button" onClick={toggleTheme}>
               {ThemeIcon}
             </ToggleDark>
           </li>

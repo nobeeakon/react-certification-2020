@@ -1,8 +1,8 @@
-const fetchData = async (API_URL) => {
-  const response = await fetch(API_URL);
-  const data = await response.json();
+import axios from 'axios';
 
-  return data.items;
+const fetchData = async (API_URL) => {
+  const response = await axios.get(API_URL);
+  return response.data.items;
 };
 
 export default fetchData;
