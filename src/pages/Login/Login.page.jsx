@@ -9,6 +9,7 @@ function LoginPage() {
   const history = useHistory();
 
   function authenticate(event) {
+    // TODO: work on Authenticate function
     console.log(event);
     event.preventDefault();
     login();

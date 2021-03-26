@@ -21,7 +21,7 @@ import {
   InputButton,
 } from './NavBar.styled';
 
-import AvatarImg from '../Avatar/Avatar.component';
+import AvatarImg from '../Avatar';
 
 const NavBar = () => {
   const [searchString, setSearchString] = useState('');

@@ -14,29 +14,30 @@ import {
   Overlay,
 } from './VideoCard.styled';
 
-const VideoCard = (props) => {
-  const titleFull = he.decode(props.title);
-  const authorFull = he.decode(props.author);
-  const descriptionFull = he.decode(props.description);
+const VideoCard = ({ title, author, description, goToVideoHandler, thumbUrl }) => {
+  const titleFull = he.decode(title);
+  const authorFull = he.decode(author);
+  const descriptionFull = he.decode(description);
 
-  const title = titleFull.length > 55 ? `${titleFull.slice(0, 52)}...` : titleFull;
-  const author = authorFull.length > 55 ? `${authorFull.slice(0, 52)}...` : authorFull;
-  const description =
+  const shortTitle = titleFull.length > 55 ? `${titleFull.slice(0, 52)}...` : titleFull;
+  const shortAuthor =
+    authorFull.length > 55 ? `${authorFull.slice(0, 52)}...` : authorFull;
+  const shortDescription =
     descriptionFull.length > 200
       ? `${descriptionFull.slice(0, 100)}...`
       : descriptionFull;
 
   return (
-    <VideoCardContainer onClick={props.goToVideoHandler}>
+    <VideoCardContainer onClick={goToVideoHandler}>
       <ThumbnailContainer>
-        <Overlay>{description}</Overlay>
-        <VideoThumbnails src={props.thumbUrl} />
+        <Overlay>{shortDescription}</Overlay>
+        <VideoThumbnails src={thumbUrl} />
       </ThumbnailContainer>
       <InfoContainer>
-        <Title title={titleFull}>{title}</Title>
+        <Title title={titleFull}>{shortTitle}</Title>
         <ExtraInfoDiv>
           <Author to="/" title={authorFull}>
-            {author}
+            {shortAuthor}
           </Author>
           <span />
         </ExtraInfoDiv>
