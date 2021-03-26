@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 
 import VideoCard from './VideoCard.component';
@@ -7,7 +7,7 @@ import ThemeProvider from '../../providers/Theme';
 import DarkModeProvider from '../../providers/DarkMode';
 
 describe('Testing VideoCard.component', () => {
-  const mockedGoToVideo = () => {};
+  const mockedGoToVideo = jest.fn(() => {});
 
   describe('VideoCard renders when missing props', () => {
     test('renders when props.title is null', () => {
@@ -135,6 +135,30 @@ describe('Testing VideoCard.component', () => {
       );
 
       expect(container).toHaveTextContent(/Wizeline's/i);
+    });
+  });
+
+  describe('Testing VideoCard onClick handler', () => {
+    it('calls goToVideoHandler when VideoCard is clicked', () => {
+      const { getByText } = render(
+        <BrowserRouter>
+          <DarkModeProvider>
+            <ThemeProvider>
+              <VideoCard
+                goToVideoHandler={mockedGoToVideo}
+                thumbUrl="image"
+                title="video title"
+                author="author"
+                description="description"
+              />
+            </ThemeProvider>
+          </DarkModeProvider>
+        </BrowserRouter>
+      );
+
+      const videoCard = getByText(/author/i);
+      fireEvent.click(videoCard);
+      expect(mockedGoToVideo).toHaveBeenCalledTimes(1);
     });
   });
 });
