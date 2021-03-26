@@ -10,12 +10,27 @@ jest.mock('../../utils/hooks/useVideos');
 
 describe('Testing VideoList', () => {
   describe('Testing CardList rendering', () => {
-    it('should display "No Video Found" when result is empty array', async () => {
-      const myMock = useVideos.mockReturnValueOnce([]);
+    it('Should display loading message, when isLoading is true', () => {
+      useVideos.mockReturnValueOnce([null, true]);
 
       const { container } = render(<VideoList />);
 
-      expect(myMock).toHaveBeenCalledTimes(1);
+      expect(container).toHaveTextContent(/loading/i);
+    });
+
+    it('Should return null, when videoList is null and isLoading is false', () => {
+      useVideos.mockReturnValueOnce([null, false]);
+
+      const { container } = render(<VideoList />);
+
+      expect(container).toBeEmptyDOMElement();
+    });
+
+    it('should display "No Video Found" when result is empty array and isLoading is false', async () => {
+      useVideos.mockReturnValueOnce([[], false]);
+
+      const { container } = render(<VideoList />);
+
       expect(container).toHaveTextContent(/no video found/i);
     });
 
@@ -90,7 +105,7 @@ describe('Testing VideoList', () => {
         },
       ];
 
-      useVideos.mockReturnValueOnce(returnedArray);
+      useVideos.mockReturnValueOnce([returnedArray, false]);
 
       const { container } = render(<App />);
 
