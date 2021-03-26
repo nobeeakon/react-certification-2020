@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, screen } from '@testing-library/react';
+import { render, fireEvent, screen, act } from '@testing-library/react';
 
 import NavBar from './NavBar.component';
 import DarThemeProvider from '../../providers/DarkMode';
@@ -22,10 +22,14 @@ describe('Testing NavBar.component', () => {
     );
 
     const darkModeToggle = getByTestId('toggleTheme-button');
-    fireEvent.click(darkModeToggle);
+    act(() => {
+      fireEvent.click(darkModeToggle);
+    });
 
     expect(storage.set).toHaveBeenNthCalledWith(1, DARK_MODE_KEY, false);
-    fireEvent.click(darkModeToggle);
+    act(() => {
+      fireEvent.click(darkModeToggle);
+    });
     expect(storage.set).toHaveBeenNthCalledWith(2, DARK_MODE_KEY, true);
   });
 
@@ -40,7 +44,9 @@ describe('Testing NavBar.component', () => {
 
     const input = screen.getByPlaceholderText(/Search/i);
     expect(input.value).toBe('');
-    fireEvent.change(input, { target: { value: '23' } });
+    act(() => {
+      fireEvent.change(input, { target: { value: '23' } });
+    });
     expect(input.value).toBe('23');
   });
 });
