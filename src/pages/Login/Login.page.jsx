@@ -3,6 +3,7 @@ import { useHistory } from 'react-router';
 
 import { useAuth } from '../../providers/Auth';
 import './Login.styles.css';
+// TODO modify css to styled components
 
 function LoginPage() {
   const { login } = useAuth();
@@ -10,7 +11,6 @@ function LoginPage() {
 
   function authenticate(event) {
     // TODO: work on Authenticate function
-    console.log(event);
     event.preventDefault();
     login();
     history.push('/secret');
