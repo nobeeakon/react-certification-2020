@@ -1,15 +1,16 @@
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 
-import fetchData from './fetchData';
+// functions to test
+import { fetchVideoListByTerm, fetchRelatedVideos, fetchVideoInfo } from './fetchData';
 
-const API_URL =
-  'https://gist.githubusercontent.com/jparciga/1d4dd34fb06ba74237f8966e2e777ff5/raw/f3af25f1505deb67e2cc9ee625a633f24d8983ff/youtube-videos-mock.json';
-const API_WRONGURL = 'https://gist.githubusercontent.com/jparciga/1d4dd';
+const BASE_URL = 'https://www.googleapis.com/youtube/v3';
+const SEARCH_URL = `${BASE_URL}/search`;
+const VIDEO_INFO_URL = `${BASE_URL}/videos`;
 
-describe('Testing fetchData function', () => {
+describe('Testing youtube API requests', () => {
   const apiServer = setupServer(
-    rest.get(API_URL, (req, res, ctx) => {
+    rest.get(SEARCH_URL, (req, res, ctx) => {
       return res(
         ctx.status(200),
         ctx.json({
@@ -26,8 +27,15 @@ describe('Testing fetchData function', () => {
       );
     }),
 
-    rest.get(API_WRONGURL, (req, res, ctx) => {
-      return res(ctx.status(404));
+    rest.get(VIDEO_INFO_URL, (req, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json({
+          kind: 'youtube#searchListResponse',
+          etag: 'LRviZfd_p3HDDD2uBk5Qv7zaEQU',
+          items: [],
+        })
+      );
     })
   );
 
@@ -37,15 +45,22 @@ describe('Testing fetchData function', () => {
   afterEach(() => apiServer.resetHandlers());
   afterAll(() => apiServer.close());
 
-  test('it should return an Array', async () => {
-    const result = await fetchData(API_URL);
-    console.log(result);
-    expect(result instanceof Array).toBe(true);
+  describe('Testing fetchVideoListByTerm and fetchRelatedVideos functions', () => {
+    test('fetchVideoListByTerm should return an Array', async () => {
+      const result = await fetchVideoListByTerm('wizeline');
+      expect(result instanceof Array).toBe(true);
+    });
+
+    test('fetchRelatedVideos should return an Array', async () => {
+      const result = await fetchRelatedVideos('wizeline');
+      expect(result instanceof Array).toBe(true);
+    });
   });
 
-  test('Rejects on error', () => {
-    expect.assertions(1);
-
-    return expect(fetchData(API_WRONGURL)).rejects.toThrow();
+  describe('Testing fetchfetchVideoInfo function', () => {
+    test('fetchVideoInfo should return an Array', async () => {
+      const result = await fetchVideoInfo('Ks-_Mh1QhMc');
+      expect(result instanceof Array).toBe(true);
+    });
   });
 });
