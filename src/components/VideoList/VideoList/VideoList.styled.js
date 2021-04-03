@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import * as breakpoints from '../../utils/deviceBreakpoints';
+import * as breakpoints from '../../../utils/deviceBreakpoints';
 
 export const VideoContainer = styled.div`
   display: grid;

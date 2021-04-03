@@ -2,9 +2,9 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 
-import VideoCard from './VideoCard.component';
-import ThemeProvider from '../../providers/Theme';
-import DarkModeProvider from '../../providers/DarkMode';
+import VideoListCard from './VideoListCard.component';
+import ThemeProvider from '../../../providers/Theme';
+import DarkModeProvider from '../../../providers/DarkMode';
 
 describe('Testing VideoCard.component', () => {
   describe('VideoCard renders when missing props', () => {
@@ -16,7 +16,7 @@ describe('Testing VideoCard.component', () => {
         <BrowserRouter>
           <DarkModeProvider>
             <ThemeProvider>
-              <VideoCard
+              <VideoListCard
                 goToVideoHandler={mockedGoToVideo}
                 thumbUrl="image"
                 title={video.title}
@@ -37,7 +37,7 @@ describe('Testing VideoCard.component', () => {
         <BrowserRouter>
           <DarkModeProvider>
             <ThemeProvider>
-              <VideoCard
+              <VideoListCard
                 goToVideoHandler={mockedGoToVideo}
                 thumbUrl="image"
                 title="title"
@@ -58,7 +58,7 @@ describe('Testing VideoCard.component', () => {
         <BrowserRouter>
           <DarkModeProvider>
             <ThemeProvider>
-              <VideoCard
+              <VideoListCard
                 goToVideoHandler={mockedGoToVideo}
                 thumbUrl="image"
                 title="title"
@@ -84,7 +84,7 @@ describe('Testing VideoCard.component', () => {
         <BrowserRouter>
           <DarkModeProvider>
             <ThemeProvider>
-              <VideoCard
+              <VideoListCard
                 goToVideoHandler={mockedGoToVideo}
                 thumbUrl="image"
                 title={codedString}
@@ -104,7 +104,7 @@ describe('Testing VideoCard.component', () => {
         <BrowserRouter>
           <DarkModeProvider>
             <ThemeProvider>
-              <VideoCard
+              <VideoListCard
                 goToVideoHandler={mockedGoToVideo}
                 thumbUrl="image"
                 title="title"
@@ -124,7 +124,7 @@ describe('Testing VideoCard.component', () => {
         <BrowserRouter>
           <DarkModeProvider>
             <ThemeProvider>
-              <VideoCard
+              <VideoListCard
                 goToVideoHandler={mockedGoToVideo}
                 thumbUrl="image"
                 title="title"
@@ -148,7 +148,7 @@ describe('Testing VideoCard.component', () => {
         <BrowserRouter>
           <DarkModeProvider>
             <ThemeProvider>
-              <VideoCard
+              <VideoListCard
                 goToVideoHandler={mockedGoToVideo}
                 thumbUrl="image"
                 title="video title"

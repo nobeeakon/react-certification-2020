@@ -1,17 +1,24 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 
+import { BrowserRouter } from 'react-router-dom';
+import DarkProvider from '../../../providers/DarkMode';
+import ThemesProvider from '../../../providers/Theme';
+
 import VideoList from './VideoList.component';
-import App from '../App';
 
-import useVideos from '../../utils/hooks/useVideos';
+import useVideos from '../../../utils/hooks/useVideos';
 
-jest.mock('../../utils/hooks/useVideos');
+import { REQUEST_API_TYPES } from '../../../utils/constants';
+
+jest.mock('../../../utils/hooks/useVideos');
 
 describe('Testing VideoList', () => {
+  const REQ_TYPE = REQUEST_API_TYPES.SEARCH_BY_TERM;
+
   describe('Testing CardList rendering', () => {
     it('Should display loading message, when isLoading is true', () => {
-      useVideos.mockReturnValueOnce([null, true]);
+      useVideos.mockReturnValueOnce({ videoList: null, isLoading: true });
 
       const { container } = render(<VideoList />);
 
@@ -19,7 +26,7 @@ describe('Testing VideoList', () => {
     });
 
     it('Should return null, when videoList is null and isLoading is false', () => {
-      useVideos.mockReturnValueOnce([null, false]);
+      useVideos.mockReturnValueOnce({ videoList: null, isLoading: false });
 
       const { container } = render(<VideoList />);
 
@@ -27,7 +34,7 @@ describe('Testing VideoList', () => {
     });
 
     it('should display "No Video Found" when result is empty array and isLoading is false', async () => {
-      useVideos.mockReturnValueOnce([[], false]);
+      useVideos.mockReturnValueOnce({ videoList: [], isLoading: false });
 
       const { container } = render(<VideoList />);
 
@@ -38,34 +45,36 @@ describe('Testing VideoList', () => {
       const returnedArray = [
         {
           kind: 'youtube#searchResult',
-          etag: '_PVKwNJf_qw9nukFeRFOtQ837o0',
+          etag: 'erqeM78PZDWIBe8qOGHGM2WdSE8',
           id: {
-            kind: 'youtube#channel',
-            channelId: 'UCPGzT4wecuWM0BH9mPiulXg',
+            kind: 'youtube#video',
+            videoId: 'nmXMgqjQzlsas',
           },
           snippet: {
-            publishedAt: '2014-09-27T01:39:18Z',
+            publishedAt: '2019-09-30T23:54:32Z',
             channelId: 'UCPGzT4wecuWM0BH9mPiulXg',
-            title: 'Wizeline',
-            description:
-              "Wizeline transforms how teams build technology. Its customers accelerate the delivery of innovative products with proven solutions, which combine Wizeline's ...",
+            title: 'title1',
+            description: 'description1',
             thumbnails: {
               default: {
-                url:
-                  'https://yt3.ggpht.com/ytc/AAUvwnighSReQlmHl_S_vSfvnWBAG5Cw4A0YxtE0tm5OpQ=s88-c-k-c0xffffffff-no-rj-mo',
+                url: 'https://i.ytimg.com/vi/nmXMgqjQzls/default.jpg',
+                width: 120,
+                height: 90,
               },
               medium: {
-                url:
-                  'https://yt3.ggpht.com/ytc/AAUvwnighSReQlmHl_S_vSfvnWBAG5Cw4A0YxtE0tm5OpQ=s240-c-k-c0xffffffff-no-rj-mo',
+                url: 'https://i.ytimg.com/vi/nmXMgqjQzls/mqdefault.jpg',
+                width: 320,
+                height: 180,
               },
               high: {
-                url:
-                  'https://yt3.ggpht.com/ytc/AAUvwnighSReQlmHl_S_vSfvnWBAG5Cw4A0YxtE0tm5OpQ=s800-c-k-c0xffffffff-no-rj-mo',
+                url: 'https://i.ytimg.com/vi/nmXMgqjQzls/hqdefault.jpg',
+                width: 480,
+                height: 360,
               },
             },
             channelTitle: 'Wizeline',
-            liveBroadcastContent: 'upcoming',
-            publishTime: '2014-09-27T01:39:18Z',
+            liveBroadcastContent: 'none',
+            publishTime: '2019-09-30T23:54:32Z',
           },
         },
         {
@@ -78,9 +87,8 @@ describe('Testing VideoList', () => {
           snippet: {
             publishedAt: '2019-09-30T23:54:32Z',
             channelId: 'UCPGzT4wecuWM0BH9mPiulXg',
-            title: 'Video Tour | Welcome to Wizeline Guadalajara',
-            description:
-              'Follow Hector Padilla, Wizeline Director of Engineering, for a lively tour of our office. In 2018, Wizeline opened its stunning new office in Guadalajara, Jalisco, ...',
+            title: 'title2',
+            description: 'description2',
             thumbnails: {
               default: {
                 url: 'https://i.ytimg.com/vi/nmXMgqjQzls/default.jpg',
@@ -105,16 +113,22 @@ describe('Testing VideoList', () => {
         },
       ];
 
-      useVideos.mockReturnValueOnce([returnedArray, false]);
+      useVideos.mockReturnValueOnce({ videoList: returnedArray, isLoading: false });
+      const searchString = 'seachString';
 
-      const { container } = render(<App />);
+      const { getByText } = render(
+        <BrowserRouter>
+          <DarkProvider>
+            <ThemesProvider>
+              <VideoList searchString={searchString} />
+            </ThemesProvider>
+          </DarkProvider>
+        </BrowserRouter>
+      );
 
-      expect(container).toHaveTextContent(
-        /Wizeline transforms how teams build technology/i
-      );
-      expect(container).toHaveTextContent(
-        /Follow Hector Padilla, Wizeline Director of Engineering/i
-      );
+      expect(useVideos).toBeCalledWith(searchString, REQ_TYPE);
+      expect(getByText(/title1/i)).toBeInTheDocument();
+      expect(getByText(/title2/i)).toBeInTheDocument();
     });
   });
 });

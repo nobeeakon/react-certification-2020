@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import StyledLink from '../StyledComponents/StyledLink';
+import StyledLink from '../../StyledComponents/StyledLink';
 
 const transition = '0.06s ease';
 

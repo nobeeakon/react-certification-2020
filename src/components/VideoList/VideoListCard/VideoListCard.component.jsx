@@ -12,9 +12,9 @@ import {
   ExtraInfoDiv,
   Author,
   Overlay,
-} from './VideoCard.styled';
+} from './VideoListCard.styled';
 
-const VideoCard = ({ title, author, description, goToVideoHandler, thumbUrl }) => {
+const VideoListCard = ({ title, author, description, goToVideoHandler, thumbUrl }) => {
   const titleFull = he.decode(title);
   const authorFull = he.decode(author);
   const descriptionFull = he.decode(description);
@@ -46,7 +46,7 @@ const VideoCard = ({ title, author, description, goToVideoHandler, thumbUrl }) =
   );
 };
 
-VideoCard.propTypes = {
+VideoListCard.propTypes = {
   title: PropTypes.string,
   author: PropTypes.string,
   description: PropTypes.string,
@@ -54,11 +54,11 @@ VideoCard.propTypes = {
   goToVideoHandler: PropTypes.func.isRequired,
 };
 
-VideoCard.defaultProps = {
+VideoListCard.defaultProps = {
   title: '',
   author: '',
   description: '',
   thumbUrl: '',
 };
 
-export default VideoCard;
+export default VideoListCard;
