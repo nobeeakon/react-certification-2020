@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import {
   fetchVideoListByTerm,
@@ -18,34 +18,33 @@ function useVideos(searchedString, requestType) {
   const [videoList, setVideoList] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchData = useCallback(async () => {
-    setIsLoading(true);
-
-    try {
-      switch (requestType) {
-        case REQUEST_API_TYPES.SEARCH_BY_TERM:
-          setVideoList(await fetchVideoListByTerm(searchedString));
-          break;
-        case REQUEST_API_TYPES.SEARCH_RELATED_VIDEOS:
-          setVideoList(await fetchRelatedVideos(searchedString));
-          break;
-        case REQUEST_API_TYPES.VIDEO_INFO:
-          setVideoList(await fetchVideoInfo(searchedString));
-          break;
-
-        default:
-          throw new Error('Requested API type is not valid');
-      }
-    } catch (error) {
-      console.log('Error while fetching videos:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [requestType, searchedString]);
-
   useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+
+      try {
+        switch (requestType) {
+          case REQUEST_API_TYPES.SEARCH_BY_TERM:
+            setVideoList(await fetchVideoListByTerm(searchedString));
+            break;
+          case REQUEST_API_TYPES.SEARCH_RELATED_VIDEOS:
+            setVideoList(await fetchRelatedVideos(searchedString));
+            break;
+          case REQUEST_API_TYPES.VIDEO_INFO:
+            setVideoList(await fetchVideoInfo(searchedString));
+            break;
+
+          default:
+            throw new Error('Requested API type is not valid');
+        }
+      } catch (error) {
+        console.log('Error while fetching videos:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
     fetchData();
-  }, [fetchData]);
+  }, [searchedString, requestType]);
 
   return { videoList, isLoading };
 }
