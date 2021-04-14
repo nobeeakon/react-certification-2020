@@ -1,7 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { useHistory } from 'react-router-dom';
+
 import he from 'he';
+
+import { queryWatchUrl } from '../../../utils/functions/routes';
 
 import {
   VideoCardContainer,
@@ -14,7 +18,15 @@ import {
   Overlay,
 } from './VideoListCard.styled';
 
-const VideoListCard = ({ title, author, description, goToVideoHandler, thumbUrl }) => {
+const VideoListCard = ({ title, author, description, videoId, thumbUrl }) => {
+  const history = useHistory();
+
+  const goToVideo = (e) => {
+    e.preventDefault();
+    const watchURL = queryWatchUrl(videoId);
+    history.push(watchURL);
+  };
+
   const titleFull = he.decode(title);
   const authorFull = he.decode(author);
   const descriptionFull = he.decode(description);
@@ -28,7 +40,7 @@ const VideoListCard = ({ title, author, description, goToVideoHandler, thumbUrl 
       : descriptionFull;
 
   return (
-    <VideoCardContainer onClick={goToVideoHandler}>
+    <VideoCardContainer onClick={goToVideo}>
       <ThumbnailContainer>
         <Overlay>{shortDescription}</Overlay>
         <VideoThumbnails src={thumbUrl} />
@@ -51,7 +63,7 @@ VideoListCard.propTypes = {
   author: PropTypes.string,
   description: PropTypes.string,
   thumbUrl: PropTypes.string,
-  goToVideoHandler: PropTypes.func.isRequired,
+  videoId: PropTypes.string.isRequired,
 };
 
 VideoListCard.defaultProps = {

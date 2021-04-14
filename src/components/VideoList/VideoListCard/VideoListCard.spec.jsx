@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 
 import VideoListCard from './VideoListCard.component';
@@ -8,8 +8,6 @@ import DarkModeProvider from '../../../providers/DarkMode';
 
 describe('Testing VideoCard.component', () => {
   describe('VideoCard renders when missing props', () => {
-    const mockedGoToVideo = jest.fn(() => {});
-
     test('renders when props.title is null', () => {
       const video = {};
       const { container } = render(
@@ -17,7 +15,7 @@ describe('Testing VideoCard.component', () => {
           <DarkModeProvider>
             <ThemeProvider>
               <VideoListCard
-                goToVideoHandler={mockedGoToVideo}
+                videoId="videoId"
                 thumbUrl="image"
                 title={video.title}
                 author="author"
@@ -38,7 +36,7 @@ describe('Testing VideoCard.component', () => {
           <DarkModeProvider>
             <ThemeProvider>
               <VideoListCard
-                goToVideoHandler={mockedGoToVideo}
+                videoId="videoId"
                 thumbUrl="image"
                 title="title"
                 author={video.author}
@@ -59,7 +57,7 @@ describe('Testing VideoCard.component', () => {
           <DarkModeProvider>
             <ThemeProvider>
               <VideoListCard
-                goToVideoHandler={mockedGoToVideo}
+                videoId="videoId"
                 thumbUrl="image"
                 title="title"
                 author="author"
@@ -76,8 +74,6 @@ describe('Testing VideoCard.component', () => {
 
   // since sometimes API returns coded strings
   describe('VideoCard shown texts are decoded', () => {
-    const mockedGoToVideo = jest.fn(() => {});
-
     const codedString = 'Wizeline&#39;s';
     test('title gets decoded', () => {
       const { container } = render(
@@ -85,7 +81,7 @@ describe('Testing VideoCard.component', () => {
           <DarkModeProvider>
             <ThemeProvider>
               <VideoListCard
-                goToVideoHandler={mockedGoToVideo}
+                videoId="videoId"
                 thumbUrl="image"
                 title={codedString}
                 author="author"
@@ -105,7 +101,7 @@ describe('Testing VideoCard.component', () => {
           <DarkModeProvider>
             <ThemeProvider>
               <VideoListCard
-                goToVideoHandler={mockedGoToVideo}
+                videoId="videoId"
                 thumbUrl="image"
                 title="title"
                 author={codedString}
@@ -125,7 +121,7 @@ describe('Testing VideoCard.component', () => {
           <DarkModeProvider>
             <ThemeProvider>
               <VideoListCard
-                goToVideoHandler={mockedGoToVideo}
+                videoId="videoId"
                 thumbUrl="image"
                 title="title"
                 author="author"
@@ -140,29 +136,5 @@ describe('Testing VideoCard.component', () => {
     });
   });
 
-  describe('Testing VideoCard onClick handler', () => {
-    const mockedGoToVideo = jest.fn(() => {});
-
-    it('calls goToVideoHandler when VideoCard is clicked', () => {
-      const { getByText } = render(
-        <BrowserRouter>
-          <DarkModeProvider>
-            <ThemeProvider>
-              <VideoListCard
-                goToVideoHandler={mockedGoToVideo}
-                thumbUrl="image"
-                title="video title"
-                author="author"
-                description="description"
-              />
-            </ThemeProvider>
-          </DarkModeProvider>
-        </BrowserRouter>
-      );
-
-      const videoCard = getByText(/author/i);
-      fireEvent.click(videoCard);
-      expect(mockedGoToVideo).toHaveBeenCalledTimes(1);
-    });
-  });
+  // TODO: test onclick ?
 });
