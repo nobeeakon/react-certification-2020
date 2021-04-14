@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 
 import RelatedVideoCard from './RelatedVideoCard.component';
@@ -8,52 +8,85 @@ import DarkModeProvider from '../../../providers/DarkMode';
 
 describe('Testing RelatedVideoCard component', () => {
   describe('RelatedVideoCard renders when missing props', () => {
-    const mockedGoToVideo = jest.fn(() => {});
+    describe('When isAvailable = true', () => {
+      it('renders when props.title is undefined', () => {
+        const video = {};
+        const { getByText } = render(
+          <BrowserRouter>
+            <DarkModeProvider>
+              <ThemeProvider>
+                <RelatedVideoCard
+                  title={video.title}
+                  channelTitle="channel Title"
+                  thumbUrl="image"
+                  isAvailable
+                  videoId="videoId"
+                />
+              </ThemeProvider>
+            </DarkModeProvider>
+          </BrowserRouter>
+        );
+        expect(getByText(/channel title/i)).toBeInTheDocument();
+      });
 
-    test('renders when props.title is null', () => {
-      const video = {};
+      it('renders when props.channelTitle is undefined ', () => {
+        const video = {};
+        const { getByText } = render(
+          <BrowserRouter>
+            <DarkModeProvider>
+              <ThemeProvider>
+                <RelatedVideoCard
+                  title="title"
+                  channelTitle={video.channelTitle}
+                  thumbUrl="image"
+                  isAvailable
+                  videoId="videoId"
+                />
+              </ThemeProvider>
+            </DarkModeProvider>
+          </BrowserRouter>
+        );
+        expect(getByText(/title/i)).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('When isAvailable = false', () => {
+    it('renders "Not available" instead of title', () => {
       const { getByText } = render(
         <BrowserRouter>
           <DarkModeProvider>
             <ThemeProvider>
               <RelatedVideoCard
-                title={video.title}
-                channelTitle="channel Title"
-                goToVideoHandler={mockedGoToVideo}
+                title="title"
+                channelTitle="channelTitle"
                 thumbUrl="image"
+                isAvailable={false}
+                videoId="videoId"
               />
             </ThemeProvider>
           </DarkModeProvider>
         </BrowserRouter>
       );
-
-      expect(getByText(/channel title/i)).toBeInTheDocument();
+      expect(getByText(/Not available/i)).toBeInTheDocument();
     });
 
-    test('renders when props.author is null', () => {
-      const video = {};
+    it('renders "Not available" when only required props (videoId) are passed', () => {
       const { getByText } = render(
         <BrowserRouter>
           <DarkModeProvider>
             <ThemeProvider>
-              <RelatedVideoCard
-                goToVideoHandler={mockedGoToVideo}
-                thumbUrl="image"
-                title="title"
-                channelTitle={video.author}
-              />
+              <RelatedVideoCard videoId="videoId" />
             </ThemeProvider>
           </DarkModeProvider>
         </BrowserRouter>
       );
-      expect(getByText(/title/i)).toBeInTheDocument();
+      expect(getByText(/Not available/i)).toBeInTheDocument();
     });
   });
 
   // since sometimes API returns coded strings
   describe('RelatedVideoCard shown texts are decoded', () => {
-    const mockedGoToVideo = jest.fn(() => {});
-
     const codedString = 'Wizeline&#39;s';
     test('title gets decoded', () => {
       const { getByText } = render(
@@ -61,10 +94,11 @@ describe('Testing RelatedVideoCard component', () => {
           <DarkModeProvider>
             <ThemeProvider>
               <RelatedVideoCard
-                goToVideoHandler={mockedGoToVideo}
-                thumbUrl="image"
                 title={codedString}
-                channelTitle="author"
+                channelTitle="channelTitle"
+                thumbUrl="image"
+                isAvailable
+                videoId="videoId"
               />
             </ThemeProvider>
           </DarkModeProvider>
@@ -79,41 +113,17 @@ describe('Testing RelatedVideoCard component', () => {
           <DarkModeProvider>
             <ThemeProvider>
               <RelatedVideoCard
-                goToVideoHandler={mockedGoToVideo}
-                thumbUrl="image"
                 title="title"
                 channelTitle={codedString}
+                thumbUrl="image"
+                isAvailable
+                videoId="videoId"
               />
             </ThemeProvider>
           </DarkModeProvider>
         </BrowserRouter>
       );
       expect(getByText(/Wizeline's/i)).toBeInTheDocument();
-    });
-  });
-
-  describe('Testing  onClick handler', () => {
-    const mockedGoToVideo = jest.fn(() => {});
-
-    it('calls goToVideoHandler when VideoCard is clicked', () => {
-      const { getByText } = render(
-        <BrowserRouter>
-          <DarkModeProvider>
-            <ThemeProvider>
-              <RelatedVideoCard
-                goToVideoHandler={mockedGoToVideo}
-                thumbUrl="image"
-                title="video title"
-                channelTitle="author"
-              />
-            </ThemeProvider>
-          </DarkModeProvider>
-        </BrowserRouter>
-      );
-
-      const videoCard = getByText(/title/i);
-      fireEvent.click(videoCard);
-      expect(mockedGoToVideo).toHaveBeenCalledTimes(1);
     });
   });
 });

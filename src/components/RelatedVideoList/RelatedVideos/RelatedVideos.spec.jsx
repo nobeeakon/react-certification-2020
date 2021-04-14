@@ -41,7 +41,24 @@ describe('Testing RelatedVideos component', () => {
       expect(getByText(/no video found/i)).toBeInTheDocument();
     });
 
-    it('should display video Cards when array is returned', async () => {
+    it('should display only items with id.videoId', async () => {
+      const thumbnails = {
+        default: {
+          url: 'https://i.ytimg.com/vi/nmXMgqjQzls/default.jpg',
+          width: 120,
+          height: 90,
+        },
+        medium: {
+          url: 'https://i.ytimg.com/vi/nmXMgqjQzls/mqdefault.jpg',
+          width: 320,
+          height: 180,
+        },
+        high: {
+          url: 'https://i.ytimg.com/vi/nmXMgqjQzls/hqdefault.jpg',
+          width: 480,
+          height: 360,
+        },
+      };
       const returnedArray = [
         {
           kind: 'youtube#searchResult',
@@ -53,24 +70,10 @@ describe('Testing RelatedVideos component', () => {
           snippet: {
             publishedAt: '2014-09-27T01:39:18Z',
             channelId: 'UCPGzT4wecuWM0BH9mPiulXg',
-            title: 'Wizeline title1',
-            description:
-              "Wizeline transforms how teams build technology. Its customers accelerate the delivery of innovative products with proven solutions, which combine Wizeline's ...",
-            thumbnails: {
-              default: {
-                url:
-                  'https://yt3.ggpht.com/ytc/AAUvwnighSReQlmHl_S_vSfvnWBAG5Cw4A0YxtE0tm5OpQ=s88-c-k-c0xffffffff-no-rj-mo',
-              },
-              medium: {
-                url:
-                  'https://yt3.ggpht.com/ytc/AAUvwnighSReQlmHl_S_vSfvnWBAG5Cw4A0YxtE0tm5OpQ=s240-c-k-c0xffffffff-no-rj-mo',
-              },
-              high: {
-                url:
-                  'https://yt3.ggpht.com/ytc/AAUvwnighSReQlmHl_S_vSfvnWBAG5Cw4A0YxtE0tm5OpQ=s800-c-k-c0xffffffff-no-rj-mo',
-              },
-            },
-            channelTitle: 'Wizeline',
+            title: 'title1',
+            description: 'description1',
+            thumbnails,
+            channelTitle: 'channelTitle1',
             liveBroadcastContent: 'upcoming',
             publishTime: '2014-09-27T01:39:18Z',
           },
@@ -80,31 +83,14 @@ describe('Testing RelatedVideos component', () => {
           etag: 'erqeM78PZDWIBe8qOGHGM2WdSE8',
           id: {
             kind: 'youtube#video',
-            videoId: 'nmXMgqjQzls',
+            videoId: 'videoId1',
           },
           snippet: {
             publishedAt: '2019-09-30T23:54:32Z',
             channelId: 'UCPGzT4wecuWM0BH9mPiulXg',
-            title: 'Video Tour | Welcome to Wizeline Guadalajara',
-            description:
-              'Follow Hector Padilla, Wizeline Director of Engineering, for a lively tour of our office. In 2018, Wizeline opened its stunning new office in Guadalajara, Jalisco, ...',
-            thumbnails: {
-              default: {
-                url: 'https://i.ytimg.com/vi/nmXMgqjQzls/default.jpg',
-                width: 120,
-                height: 90,
-              },
-              medium: {
-                url: 'https://i.ytimg.com/vi/nmXMgqjQzls/mqdefault.jpg',
-                width: 320,
-                height: 180,
-              },
-              high: {
-                url: 'https://i.ytimg.com/vi/nmXMgqjQzls/hqdefault.jpg',
-                width: 480,
-                height: 360,
-              },
-            },
+            title: 'title2',
+            description: 'description2',
+            thumbnails,
             channelTitle: 'Wizeline',
             liveBroadcastContent: 'none',
             publishTime: '2019-09-30T23:54:32Z',
@@ -125,8 +111,7 @@ describe('Testing RelatedVideos component', () => {
       );
 
       expect(useVideos).toBeCalledWith(relatedToVideoId, REQ_TYPE);
-      expect(getByText(/Wizeline title1/i)).toBeInTheDocument();
-      expect(getByText(/Video Tour | Welcome /i)).toBeInTheDocument();
+      expect(getByText(/title2/i)).toBeInTheDocument();
     });
   });
 });

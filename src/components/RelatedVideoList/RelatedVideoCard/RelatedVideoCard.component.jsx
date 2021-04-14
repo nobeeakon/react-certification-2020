@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 
 import he from 'he';
 
 import { FaPlay } from 'react-icons/fa';
 import { RiErrorWarningFill } from 'react-icons/ri';
+
+import { queryWatchUrl } from '../../../utils/functions/routes';
 
 import {
   VideoCardContainer,
@@ -17,13 +20,21 @@ import {
   Overlay,
 } from './RelatedVideoCard.styled';
 
-const RelatedVideoCard = ({ title, channelTitle, goToVideoHandler, thumbUrl }) => {
-  const titleFull = he.decode(title);
+const RelatedVideoCard = ({ title, channelTitle, thumbUrl, isAvailable, videoId }) => {
+  const history = useHistory();
+
+  const titleFull = isAvailable ? he.decode(title) : 'Not available';
   const channelTitleFull = he.decode(channelTitle);
 
-  // "Not available" is the default value, check in RelatedVideoCard.defaultProps
-  const isNotAvailable = title === 'Not available';
-  const PlayIcon = isNotAvailable ? <RiErrorWarningFill /> : <FaPlay />;
+  const PlayIcon = !isAvailable ? <RiErrorWarningFill /> : <FaPlay />;
+
+  const goToVideo = (e) => {
+    e.preventDefault();
+    if (isAvailable) {
+      const watchURL = queryWatchUrl(videoId);
+      history.push(watchURL);
+    }
+  };
 
   const shortTitle = titleFull.length > 36 ? `${titleFull.slice(0, 33)}...` : titleFull;
   const shortChannelTitle =
@@ -32,7 +43,7 @@ const RelatedVideoCard = ({ title, channelTitle, goToVideoHandler, thumbUrl }) =
       : channelTitleFull;
 
   return (
-    <VideoCardContainer onClick={goToVideoHandler} isNotAvailable={isNotAvailable}>
+    <VideoCardContainer onClick={goToVideo} isNotAvailable={!isAvailable}>
       <ThumbnailContainer>
         <Overlay>{PlayIcon}</Overlay>
         <VideoThumbnails src={thumbUrl} />
@@ -52,16 +63,18 @@ const RelatedVideoCard = ({ title, channelTitle, goToVideoHandler, thumbUrl }) =
 };
 
 RelatedVideoCard.propTypes = {
-  channelTitle: PropTypes.string,
   title: PropTypes.string,
+  channelTitle: PropTypes.string,
   thumbUrl: PropTypes.string,
-  goToVideoHandler: PropTypes.func.isRequired,
+  isAvailable: PropTypes.bool,
+  videoId: PropTypes.string.isRequired,
 };
 
 RelatedVideoCard.defaultProps = {
+  title: '',
   channelTitle: '',
-  title: 'Not available',
   thumbUrl: '',
+  isAvailable: false,
 };
 
 export default RelatedVideoCard;
