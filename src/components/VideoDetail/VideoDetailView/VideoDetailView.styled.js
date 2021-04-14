@@ -64,7 +64,7 @@ export const ChannelTitle = styled.h4`
   color: ${(props) => props.theme.contrast1};
 `;
 
-export const Description = styled.p`
+export const DescriptionItem = styled.p`
   width: 80%;
   color: ${(props) => props.theme.contrast2};
   padding: 0 20px;
