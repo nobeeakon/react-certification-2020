@@ -42,6 +42,26 @@ describe('Testing VideoList', () => {
     });
 
     it('should display video Cards when array is returned', async () => {
+      const snippet = {
+        publishedAt: '2019-09-30T23:54:32Z',
+        channelId: 'UCPGzT4wecuWM0BH9mPiulXg',
+        title: 'title1',
+        description: 'description1',
+        thumbnails: {
+          default: {
+            url: 'thumbUrl',
+          },
+          medium: {
+            url: 'thumbUrl',
+          },
+          high: {
+            url: 'thumbUrl',
+          },
+        },
+        channelTitle: 'Wizeline',
+        liveBroadcastContent: 'none',
+        publishTime: '2019-09-30T23:54:32Z',
+      };
       const returnedArray = [
         {
           kind: 'youtube#searchResult',
@@ -51,30 +71,9 @@ describe('Testing VideoList', () => {
             videoId: 'nmXMgqjQzlsas',
           },
           snippet: {
-            publishedAt: '2019-09-30T23:54:32Z',
-            channelId: 'UCPGzT4wecuWM0BH9mPiulXg',
+            ...snippet,
             title: 'title1',
             description: 'description1',
-            thumbnails: {
-              default: {
-                url: 'https://i.ytimg.com/vi/nmXMgqjQzls/default.jpg',
-                width: 120,
-                height: 90,
-              },
-              medium: {
-                url: 'https://i.ytimg.com/vi/nmXMgqjQzls/mqdefault.jpg',
-                width: 320,
-                height: 180,
-              },
-              high: {
-                url: 'https://i.ytimg.com/vi/nmXMgqjQzls/hqdefault.jpg',
-                width: 480,
-                height: 360,
-              },
-            },
-            channelTitle: 'Wizeline',
-            liveBroadcastContent: 'none',
-            publishTime: '2019-09-30T23:54:32Z',
           },
         },
         {
@@ -84,31 +83,11 @@ describe('Testing VideoList', () => {
             kind: 'youtube#video',
             videoId: 'nmXMgqjQzls',
           },
+
           snippet: {
-            publishedAt: '2019-09-30T23:54:32Z',
-            channelId: 'UCPGzT4wecuWM0BH9mPiulXg',
+            ...snippet,
             title: 'title2',
             description: 'description2',
-            thumbnails: {
-              default: {
-                url: 'https://i.ytimg.com/vi/nmXMgqjQzls/default.jpg',
-                width: 120,
-                height: 90,
-              },
-              medium: {
-                url: 'https://i.ytimg.com/vi/nmXMgqjQzls/mqdefault.jpg',
-                width: 320,
-                height: 180,
-              },
-              high: {
-                url: 'https://i.ytimg.com/vi/nmXMgqjQzls/hqdefault.jpg',
-                width: 480,
-                height: 360,
-              },
-            },
-            channelTitle: 'Wizeline',
-            liveBroadcastContent: 'none',
-            publishTime: '2019-09-30T23:54:32Z',
           },
         },
       ];
