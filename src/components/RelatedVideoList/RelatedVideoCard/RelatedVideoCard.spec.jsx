@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 
 import RelatedVideoCard from './RelatedVideoCard.component';
 import ThemeProvider from '../../../providers/Theme';
-import DarkModeProvider from '../../../providers/DarkMode';
+import GlobalContextProvider from '../../../providers/Global';
 
 describe('Testing RelatedVideoCard component', () => {
   describe('RelatedVideoCard renders when missing props', () => {
@@ -13,7 +13,7 @@ describe('Testing RelatedVideoCard component', () => {
         const video = {};
         const { getByText } = render(
           <BrowserRouter>
-            <DarkModeProvider>
+            <GlobalContextProvider>
               <ThemeProvider>
                 <RelatedVideoCard
                   title={video.title}
@@ -23,7 +23,7 @@ describe('Testing RelatedVideoCard component', () => {
                   videoId="videoId"
                 />
               </ThemeProvider>
-            </DarkModeProvider>
+            </GlobalContextProvider>
           </BrowserRouter>
         );
         expect(getByText(/channel title/i)).toBeInTheDocument();
@@ -33,7 +33,7 @@ describe('Testing RelatedVideoCard component', () => {
         const video = {};
         const { getByText } = render(
           <BrowserRouter>
-            <DarkModeProvider>
+            <GlobalContextProvider>
               <ThemeProvider>
                 <RelatedVideoCard
                   title="title"
@@ -43,7 +43,7 @@ describe('Testing RelatedVideoCard component', () => {
                   videoId="videoId"
                 />
               </ThemeProvider>
-            </DarkModeProvider>
+            </GlobalContextProvider>
           </BrowserRouter>
         );
         expect(getByText(/title/i)).toBeInTheDocument();
@@ -55,7 +55,7 @@ describe('Testing RelatedVideoCard component', () => {
     it('renders "Not available" instead of title', () => {
       const { getByText } = render(
         <BrowserRouter>
-          <DarkModeProvider>
+          <GlobalContextProvider>
             <ThemeProvider>
               <RelatedVideoCard
                 title="title"
@@ -65,7 +65,7 @@ describe('Testing RelatedVideoCard component', () => {
                 videoId="videoId"
               />
             </ThemeProvider>
-          </DarkModeProvider>
+          </GlobalContextProvider>
         </BrowserRouter>
       );
       expect(getByText(/Not available/i)).toBeInTheDocument();
@@ -74,11 +74,11 @@ describe('Testing RelatedVideoCard component', () => {
     it('renders "Not available" when only required props (videoId) are passed', () => {
       const { getByText } = render(
         <BrowserRouter>
-          <DarkModeProvider>
+          <GlobalContextProvider>
             <ThemeProvider>
               <RelatedVideoCard videoId="videoId" />
             </ThemeProvider>
-          </DarkModeProvider>
+          </GlobalContextProvider>
         </BrowserRouter>
       );
       expect(getByText(/Not available/i)).toBeInTheDocument();
@@ -91,7 +91,7 @@ describe('Testing RelatedVideoCard component', () => {
     test('title gets decoded', () => {
       const { getByText } = render(
         <BrowserRouter>
-          <DarkModeProvider>
+          <GlobalContextProvider>
             <ThemeProvider>
               <RelatedVideoCard
                 title={codedString}
@@ -101,7 +101,7 @@ describe('Testing RelatedVideoCard component', () => {
                 videoId="videoId"
               />
             </ThemeProvider>
-          </DarkModeProvider>
+          </GlobalContextProvider>
         </BrowserRouter>
       );
       expect(getByText(/Wizeline's/i)).toBeInTheDocument();
@@ -110,7 +110,7 @@ describe('Testing RelatedVideoCard component', () => {
     test('channelTitle gets decoded', () => {
       const { getByText } = render(
         <BrowserRouter>
-          <DarkModeProvider>
+          <GlobalContextProvider>
             <ThemeProvider>
               <RelatedVideoCard
                 title="title"
@@ -120,7 +120,7 @@ describe('Testing RelatedVideoCard component', () => {
                 videoId="videoId"
               />
             </ThemeProvider>
-          </DarkModeProvider>
+          </GlobalContextProvider>
         </BrowserRouter>
       );
       expect(getByText(/Wizeline's/i)).toBeInTheDocument();

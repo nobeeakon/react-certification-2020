@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 
 import { BrowserRouter } from 'react-router-dom';
-import DarkProvider from '../../../providers/DarkMode';
+import GlobalContextProvider from '../../../providers/Global';
 import ThemesProvider from '../../../providers/Theme';
 
 import VideoList from './VideoList.component';
@@ -97,11 +97,11 @@ describe('Testing VideoList', () => {
 
       const { getByText } = render(
         <BrowserRouter>
-          <DarkProvider>
+          <GlobalContextProvider>
             <ThemesProvider>
               <VideoList searchString={searchString} />
             </ThemesProvider>
-          </DarkProvider>
+          </GlobalContextProvider>
         </BrowserRouter>
       );
 

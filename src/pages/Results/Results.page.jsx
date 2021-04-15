@@ -1,24 +1,26 @@
 import React from 'react';
 
-import { withRouter } from 'react-router';
-import queryString from 'query-string';
+/* import { withRouter } from 'react-router';
+import queryString from 'query-string'; */
 import { Redirect } from 'react-router-dom';
+
+import { useGlobalContext } from '../../providers/Global/Global.provider';
 
 import VideoList from '../../components/VideoList/VideoList';
 
-const Results = ({ location }) => {
-  const parsedQuery = queryString.parse(location.search);
-  const searchQuery = parsedQuery.search_query;
+const Results = () => {
+  const { globalState } = useGlobalContext();
+  const { searchTerm } = globalState;
 
-  if (!searchQuery) {
+  if (!searchTerm) {
     return <Redirect to="/" />;
   }
 
   return (
     <div>
-      <VideoList searchString={searchQuery} />
+      <VideoList searchString={searchTerm} />
     </div>
   );
 };
 
-export default withRouter(Results);
+export default Results;

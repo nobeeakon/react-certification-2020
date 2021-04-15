@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 
 import { BrowserRouter } from 'react-router-dom';
-import DarkProvider from '../../../providers/DarkMode';
+import GlobalContextProvider from '../../../providers/Global';
 import ThemesProvider from '../../../providers/Theme';
 
 import RelatedVideos from './RelatedVideos.component';
@@ -102,11 +102,11 @@ describe('Testing RelatedVideos component', () => {
 
       const { getByText } = render(
         <BrowserRouter>
-          <DarkProvider>
+          <GlobalContextProvider>
             <ThemesProvider>
               <RelatedVideos relatedToVideoId={relatedToVideoId} />
             </ThemesProvider>
-          </DarkProvider>
+          </GlobalContextProvider>
         </BrowserRouter>
       );
 

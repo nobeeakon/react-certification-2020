@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 
 import VideoListCard from './VideoListCard.component';
 import ThemeProvider from '../../../providers/Theme';
-import DarkModeProvider from '../../../providers/DarkMode';
+import GlobalContextProvider from '../../../providers/Global';
 
 describe('Testing VideoCard.component', () => {
   describe('VideoCard renders when missing props', () => {
@@ -12,7 +12,7 @@ describe('Testing VideoCard.component', () => {
       const video = {};
       const { container } = render(
         <BrowserRouter>
-          <DarkModeProvider>
+          <GlobalContextProvider>
             <ThemeProvider>
               <VideoListCard
                 videoId="videoId"
@@ -22,7 +22,7 @@ describe('Testing VideoCard.component', () => {
                 description="description"
               />
             </ThemeProvider>
-          </DarkModeProvider>
+          </GlobalContextProvider>
         </BrowserRouter>
       );
 
@@ -33,7 +33,7 @@ describe('Testing VideoCard.component', () => {
       const video = {};
       const { container } = render(
         <BrowserRouter>
-          <DarkModeProvider>
+          <GlobalContextProvider>
             <ThemeProvider>
               <VideoListCard
                 videoId="videoId"
@@ -43,7 +43,7 @@ describe('Testing VideoCard.component', () => {
                 description="description"
               />
             </ThemeProvider>
-          </DarkModeProvider>
+          </GlobalContextProvider>
         </BrowserRouter>
       );
 
@@ -54,7 +54,7 @@ describe('Testing VideoCard.component', () => {
       const video = {};
       const { container } = render(
         <BrowserRouter>
-          <DarkModeProvider>
+          <GlobalContextProvider>
             <ThemeProvider>
               <VideoListCard
                 videoId="videoId"
@@ -64,7 +64,7 @@ describe('Testing VideoCard.component', () => {
                 description={video.description}
               />
             </ThemeProvider>
-          </DarkModeProvider>
+          </GlobalContextProvider>
         </BrowserRouter>
       );
 
@@ -78,7 +78,7 @@ describe('Testing VideoCard.component', () => {
     test('title gets decoded', () => {
       const { container } = render(
         <BrowserRouter>
-          <DarkModeProvider>
+          <GlobalContextProvider>
             <ThemeProvider>
               <VideoListCard
                 videoId="videoId"
@@ -88,7 +88,7 @@ describe('Testing VideoCard.component', () => {
                 description="description"
               />
             </ThemeProvider>
-          </DarkModeProvider>
+          </GlobalContextProvider>
         </BrowserRouter>
       );
 
@@ -98,7 +98,7 @@ describe('Testing VideoCard.component', () => {
     test('author gets decoded', () => {
       const { container } = render(
         <BrowserRouter>
-          <DarkModeProvider>
+          <GlobalContextProvider>
             <ThemeProvider>
               <VideoListCard
                 videoId="videoId"
@@ -108,7 +108,7 @@ describe('Testing VideoCard.component', () => {
                 description="description"
               />
             </ThemeProvider>
-          </DarkModeProvider>
+          </GlobalContextProvider>
         </BrowserRouter>
       );
 
@@ -118,7 +118,7 @@ describe('Testing VideoCard.component', () => {
     test('description gets decoded', () => {
       const { container } = render(
         <BrowserRouter>
-          <DarkModeProvider>
+          <GlobalContextProvider>
             <ThemeProvider>
               <VideoListCard
                 videoId="videoId"
@@ -128,7 +128,7 @@ describe('Testing VideoCard.component', () => {
                 description={codedString}
               />
             </ThemeProvider>
-          </DarkModeProvider>
+          </GlobalContextProvider>
         </BrowserRouter>
       );
 
