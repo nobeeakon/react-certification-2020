@@ -1,6 +1,6 @@
 import getVideoKey from './getVideoKey';
 
-describe('Testing fetchData function', () => {
+describe('Testing getVideoKey function', () => {
   test('Return videoId when has video.id.videoId', async () => {
     const video = {
       etag: '_PVKwNJf_qw9nukFeRFOtQ837o0',

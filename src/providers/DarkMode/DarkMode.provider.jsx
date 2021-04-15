@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 
-import { DARK_MODE_KEY } from '../../utils/constants';
+import { DARK_MODE_STORAGE_KEY } from '../../utils/constants';
 import { storage } from '../../utils/storage';
 
 const DarkModeContext = React.createContext(null);
@@ -19,7 +19,7 @@ function DarkModeProvider({ children }) {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
-    const currState = storage.get(DARK_MODE_KEY);
+    const currState = storage.get(DARK_MODE_STORAGE_KEY);
 
     const isDark = Boolean(currState);
 
@@ -29,7 +29,7 @@ function DarkModeProvider({ children }) {
   const toggleDarkMode = useCallback(() => {
     setIsDarkMode((prevVal) => !prevVal);
 
-    storage.set(DARK_MODE_KEY, isDarkMode);
+    storage.set(DARK_MODE_STORAGE_KEY, isDarkMode);
   }, [isDarkMode]);
 
   return (

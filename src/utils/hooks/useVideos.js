@@ -1,30 +1,52 @@
 import { useState, useEffect } from 'react';
 
-import fetchData from '../functions/fetchData';
+import {
+  fetchVideoListByTerm,
+  fetchRelatedVideos,
+  fetchVideoInfo,
+} from '../functions/fetchData';
 
-const API_URL =
-  'https://gist.githubusercontent.com/jparciga/1d4dd34fb06ba74237f8966e2e777ff5/raw/f3af25f1505deb67e2cc9ee625a633f24d8983ff/youtube-videos-mock.json';
+import { REQUEST_API_TYPES } from '../constants';
 
-function useVideos() {
+/**
+ *  custom hook used to fetch videos from youtube API V3
+ * @param {string} searchedString - the string to be searched, can be a term or videoId
+ * @param {string} requestType - one of many research types defined in REQUEST_API
+ * @returns { { videoList: (null|Array.<Object>), isLoading:boolean }}
+ */
+function useVideos(searchedString, requestType) {
   const [videoList, setVideoList] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchVideos = async () => {
+    const fetchData = async () => {
+      setIsLoading(true);
+
       try {
-        const data = await fetchData(API_URL);
-        setVideoList(data);
-        setIsLoading(false);
+        switch (requestType) {
+          case REQUEST_API_TYPES.SEARCH_BY_TERM:
+            setVideoList(await fetchVideoListByTerm(searchedString));
+            break;
+          case REQUEST_API_TYPES.SEARCH_RELATED_VIDEOS:
+            setVideoList(await fetchRelatedVideos(searchedString));
+            break;
+          case REQUEST_API_TYPES.VIDEO_INFO:
+            setVideoList(await fetchVideoInfo(searchedString));
+            break;
+
+          default:
+            throw new Error('Requested API type is not valid');
+        }
       } catch (error) {
         console.log('Error while fetching videos:', error);
+      } finally {
         setIsLoading(false);
       }
     };
+    fetchData();
+  }, [searchedString, requestType]);
 
-    fetchVideos();
-  }, []);
-
-  return [videoList, isLoading];
+  return { videoList, isLoading };
 }
 
 export default useVideos;

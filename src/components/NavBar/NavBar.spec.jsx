@@ -7,7 +7,7 @@ import AuthProvider from '../../providers/Auth';
 
 import { storage } from '../../utils/storage';
 
-import { DARK_MODE_KEY } from '../../utils/constants';
+import { DARK_MODE_STORAGE_KEY } from '../../utils/constants';
 
 jest.mock('../../utils/storage');
 
@@ -26,11 +26,11 @@ describe('Testing NavBar.component', () => {
       fireEvent.click(darkModeToggle);
     });
 
-    expect(storage.set).toHaveBeenNthCalledWith(1, DARK_MODE_KEY, false);
+    expect(storage.set).toHaveBeenNthCalledWith(1, DARK_MODE_STORAGE_KEY, false);
     act(() => {
       fireEvent.click(darkModeToggle);
     });
-    expect(storage.set).toHaveBeenNthCalledWith(2, DARK_MODE_KEY, true);
+    expect(storage.set).toHaveBeenNthCalledWith(2, DARK_MODE_STORAGE_KEY, true);
   });
 
   test('Search value should change when input', () => {

@@ -8,6 +8,8 @@ import { GoSearch } from 'react-icons/go';
 import { useDark } from '../../providers/DarkMode/DarkMode.provider';
 import { useAuth } from '../../providers/Auth/Auth.provider';
 
+import { queryResultsUrl } from '../../utils/functions/routes';
+
 import {
   StyledHeader,
   StyledNav,
@@ -33,9 +35,9 @@ const NavBar = () => {
 
   const themeIconSize = '80%';
   const ThemeIcon = isDarkMode ? (
-    <HiMoon size={themeIconSize} />
-  ) : (
     <CgSun size={themeIconSize} />
+  ) : (
+    <HiMoon size={themeIconSize} />
   );
 
   const handleInput = (e) => {
@@ -44,8 +46,8 @@ const NavBar = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    // TODO: write down this functionality
-    console.log(`Searching: ${searchString}`);
+    const resultsRoute = queryResultsUrl(searchString);
+    history.push(resultsRoute);
   };
 
   const goHome = (event) => {

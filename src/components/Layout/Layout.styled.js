@@ -1,9 +1,7 @@
 import styled from 'styled-components';
 
-export const Main = styled.main(
-  ({ theme }) => `
-  background-color: ${theme.primary};
+export const Main = styled.main`
+  background-color: ${(props) => props.theme.primary};
   padding-top: 15px;
-  height: 110%;
-`
-);
+  min-height: 100vh;
+`;
