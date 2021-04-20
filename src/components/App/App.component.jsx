@@ -2,7 +2,8 @@ import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 import AuthProvider from '../../providers/Auth';
-import DarkProvider from '../../providers/DarkMode';
+
+import GlobalProvider from '../../providers/Global';
 import ThemesProvider from '../../providers/Theme';
 
 import NavBar from '../NavBar';
@@ -22,7 +23,7 @@ function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <DarkProvider>
+        <GlobalProvider>
           <ThemesProvider>
             <NavBar />
             <Layout>
@@ -50,7 +51,7 @@ function App() {
               </Switch>
             </Layout>
           </ThemesProvider>
-        </DarkProvider>
+        </GlobalProvider>
       </AuthProvider>
     </BrowserRouter>
   );

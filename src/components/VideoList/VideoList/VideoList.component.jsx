@@ -15,7 +15,7 @@ const CardList = ({ searchString }) => {
   const { videoList, isLoading } = useVideos(searchString, REQ_TYPE);
 
   if (isLoading) return <NoVideoFound>Loading...</NoVideoFound>;
-  if (!videoList) return null;
+  if (!videoList) return null; // TODO change this to error
 
   return (
     <div>

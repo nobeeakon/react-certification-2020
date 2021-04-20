@@ -5,10 +5,12 @@ import { CgSun } from 'react-icons/cg';
 import { HiMoon, HiOutlineHome } from 'react-icons/hi';
 import { GoSearch } from 'react-icons/go';
 
-import { useDark } from '../../providers/DarkMode/DarkMode.provider';
+import { ACTIONS as GLOBAL_ACTIONS } from '../../providers/Global/useGlobalReducer';
+import { useGlobalContext } from '../../providers/Global/Global.provider';
+
 import { useAuth } from '../../providers/Auth/Auth.provider';
 
-import { queryResultsUrl } from '../../utils/functions/routes';
+import { ROUTES } from '../../utils/functions/routes';
 
 import {
   StyledHeader,
@@ -26,18 +28,20 @@ import {
 import AvatarImg from '../Avatar';
 
 const NavBar = () => {
-  const [searchString, setSearchString] = useState('');
+  const history = useHistory();
 
-  const { toggleDarkMode, isDarkMode } = useDark();
+  const { globalState, dispatchGlobal } = useGlobalContext();
+  const [searchString, setSearchString] = useState(globalState.searchTerm);
+
   const { isAuthenticated } = useAuth();
 
-  const history = useHistory();
+  const { isDarkMode } = globalState;
 
   const themeIconSize = '80%';
   const ThemeIcon = isDarkMode ? (
-    <CgSun size={themeIconSize} />
+    <CgSun size={themeIconSize} data-testid="icon-sun-testid" />
   ) : (
-    <HiMoon size={themeIconSize} />
+    <HiMoon size={themeIconSize} data-testid="icon-moon-testid" />
   );
 
   const handleInput = (e) => {
@@ -46,8 +50,10 @@ const NavBar = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    const resultsRoute = queryResultsUrl(searchString);
-    history.push(resultsRoute);
+    setSearchString((prev) => prev.trim());
+    dispatchGlobal({ type: GLOBAL_ACTIONS.UPDATE_SEARCH, payload: searchString });
+
+    history.push(`/${ROUTES.RESULTS}`);
   };
 
   const goHome = (event) => {
@@ -57,7 +63,7 @@ const NavBar = () => {
 
   const toggleTheme = (e) => {
     e.preventDefault();
-    toggleDarkMode();
+    dispatchGlobal({ type: GLOBAL_ACTIONS.TOOGLE_DARK });
   };
 
   const handleSignIn = (e) => {
@@ -67,7 +73,7 @@ const NavBar = () => {
 
   return (
     <StyledHeader>
-      <HomeButton onClick={goHome}>
+      <HomeButton onClick={goHome} data-testid="home-button">
         <HiOutlineHome size="90%" />
       </HomeButton>
       <StyledNav>
@@ -75,7 +81,7 @@ const NavBar = () => {
           <li>
             <StyledForm>
               <Input placeholder="Search" onChange={handleInput} value={searchString} />
-              <InputButton onClick={handleSearch}>
+              <InputButton onClick={handleSearch} data-testid="input-button-testid">
                 <GoSearch />
               </InputButton>
             </StyledForm>
@@ -85,7 +91,9 @@ const NavBar = () => {
             {isAuthenticated ? (
               <AvatarImg />
             ) : (
-              <SignIn onClick={handleSignIn}>Sign In </SignIn>
+              <SignIn onClick={handleSignIn} data-testid="sign-in-button">
+                Sign In{' '}
+              </SignIn>
             )}
           </LeftSideLi>
           <li>

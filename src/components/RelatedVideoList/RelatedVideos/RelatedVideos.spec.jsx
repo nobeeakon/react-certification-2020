@@ -1,9 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 
-import { BrowserRouter } from 'react-router-dom';
-import DarkProvider from '../../../providers/DarkMode';
-import ThemesProvider from '../../../providers/Theme';
+import customRenderGlobalProviders from '../../../utils/tests/customRenders/customRenderGlobalProviders';
 
 import RelatedVideos from './RelatedVideos.component';
 
@@ -100,14 +98,8 @@ describe('Testing RelatedVideos component', () => {
 
       useVideos.mockReturnValueOnce({ videoList: returnedArray, isLoading: false });
 
-      const { getByText } = render(
-        <BrowserRouter>
-          <DarkProvider>
-            <ThemesProvider>
-              <RelatedVideos relatedToVideoId={relatedToVideoId} />
-            </ThemesProvider>
-          </DarkProvider>
-        </BrowserRouter>
+      const { getByText } = customRenderGlobalProviders(
+        <RelatedVideos relatedToVideoId={relatedToVideoId} />
       );
 
       expect(useVideos).toBeCalledWith(relatedToVideoId, REQ_TYPE);
