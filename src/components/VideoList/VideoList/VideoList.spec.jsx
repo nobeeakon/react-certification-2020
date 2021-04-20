@@ -1,9 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 
-import { BrowserRouter } from 'react-router-dom';
-import GlobalContextProvider from '../../../providers/Global';
-import ThemesProvider from '../../../providers/Theme';
+import customRenderGlobalProviders from '../../../utils/tests/customRenders/customRenderGlobalProviders';
 
 import VideoList from './VideoList.component';
 
@@ -95,14 +93,8 @@ describe('Testing VideoList', () => {
       useVideos.mockReturnValueOnce({ videoList: returnedArray, isLoading: false });
       const searchString = 'seachString';
 
-      const { getByText } = render(
-        <BrowserRouter>
-          <GlobalContextProvider>
-            <ThemesProvider>
-              <VideoList searchString={searchString} />
-            </ThemesProvider>
-          </GlobalContextProvider>
-        </BrowserRouter>
+      const { getByText } = customRenderGlobalProviders(
+        <VideoList searchString={searchString} />
       );
 
       expect(useVideos).toBeCalledWith(searchString, REQ_TYPE);
