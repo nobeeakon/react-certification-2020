@@ -5,10 +5,8 @@ import { CgSun } from 'react-icons/cg';
 import { HiMoon, HiOutlineHome } from 'react-icons/hi';
 import { GoSearch } from 'react-icons/go';
 
-import {
-  useGlobalContext,
-  ACTIONS as GLOBAL_ACTIONS,
-} from '../../providers/Global/Global.provider';
+import { ACTIONS as GLOBAL_ACTIONS } from '../../providers/Global/useGlobalReducer';
+import { useGlobalContext } from '../../providers/Global/Global.provider';
 
 import { useAuth } from '../../providers/Auth/Auth.provider';
 
@@ -31,18 +29,19 @@ import AvatarImg from '../Avatar';
 
 const NavBar = () => {
   const history = useHistory();
-  const [searchString, setSearchString] = useState('');
 
   const { globalState, dispatchGlobal } = useGlobalContext();
+  const [searchString, setSearchString] = useState(globalState.searchTerm);
+
   const { isAuthenticated } = useAuth();
 
   const { isDarkMode } = globalState;
 
   const themeIconSize = '80%';
   const ThemeIcon = isDarkMode ? (
-    <CgSun size={themeIconSize} />
+    <CgSun size={themeIconSize} data-testid="icon-sun-testid" />
   ) : (
-    <HiMoon size={themeIconSize} />
+    <HiMoon size={themeIconSize} data-testid="icon-moon-testid" />
   );
 
   const handleInput = (e) => {
