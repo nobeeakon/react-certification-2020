@@ -1,7 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
-
-import AuthProvider from '../../providers/Auth';
+import { HashRouter as Router, Switch, Route } from 'react-router-dom';
 
 import GlobalProvider from '../../providers/Global';
 import ThemesProvider from '../../providers/Theme';
@@ -11,9 +9,11 @@ import NavBar from '../NavBar';
 import HomePage from '../../pages/Home';
 import WatchPage from '../../pages/Watch';
 import Results from '../../pages/Results';
-import LoginPage from '../../pages/Login';
-import NotFound from '../../pages/NotFound';
-import SecretPage from '../../pages/Secret';
+import NotFoundPage from '../../pages/NotFound';
+
+import WatchPrivatePage from '../../pages/WatchPrivate';
+import LibraryPrivatePage from '../../pages/Library';
+
 import Private from '../Private';
 import Layout from '../Layout';
 
@@ -21,39 +21,38 @@ import { ROUTES } from '../../utils/functions/routes';
 
 function App() {
   return (
-    <BrowserRouter>
-      <AuthProvider>
-        <GlobalProvider>
-          <ThemesProvider>
-            <NavBar />
-            <Layout>
-              <Switch>
-                <Route exact path="/">
-                  <HomePage />
-                </Route>
+    <Router>
+      <GlobalProvider>
+        <ThemesProvider>
+          <NavBar />
+          <Layout>
+            <Switch>
+              <Route exact path="/">
+                <HomePage />
+              </Route>
 
-                <Route exact path={`/${ROUTES.RESULTS}`}>
-                  <Results />
-                </Route>
-                <Route exact path={`/${ROUTES.WATCH}`}>
-                  <WatchPage />
-                </Route>
-                <Route exact path="/login">
-                  <LoginPage />
-                </Route>
-                <Private exact path="/secret">
-                  <SecretPage />
-                </Private>
-                {/* TODO check if this is working correctly */}
-                <Route path="*">
-                  <NotFound />
-                </Route>
-              </Switch>
-            </Layout>
-          </ThemesProvider>
-        </GlobalProvider>
-      </AuthProvider>
-    </BrowserRouter>
+              <Route exact path={`/${ROUTES.RESULTS}`}>
+                <Results />
+              </Route>
+              <Route exact path={`/${ROUTES.WATCH}`}>
+                <WatchPage />
+              </Route>
+
+              <Private exact path={`/${ROUTES.LIBRARY}`}>
+                <LibraryPrivatePage />
+              </Private>
+              <Private exact path={`/${ROUTES.PRIVATE_WATCH}`}>
+                <WatchPrivatePage />
+              </Private>
+              {/* TODO check if this is working correctly */}
+              <Route path="*">
+                <NotFoundPage />
+              </Route>
+            </Switch>
+          </Layout>
+        </ThemesProvider>
+      </GlobalProvider>
+    </Router>
   );
 }
 

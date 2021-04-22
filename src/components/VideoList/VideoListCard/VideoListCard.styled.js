@@ -4,24 +4,32 @@ import StyledLink from '../../StyledComponents/StyledLink';
 
 const transition = '0.06s ease';
 
-export const Overlay = styled.div(
-  ({ theme }) => `
+export const Overlay = styled.div`
   position: absolute;
   text-align: left;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 100%;
+
   opacity: 0;
   transition: ${transition};
   background-color: #222729;
   padding: 10px;
-  color: ${theme.general.light};
+  color: ${(props) => props.theme.general.light};
 
   font-size: 0.6rem;
-`
-);
+`;
+
+export const OverLayButtonContainer = styled.div`
+  position: absolute;
+
+  bottom: 0;
+  right: 0;
+
+  width: 40px;
+  height: 40px;
+`;
 
 // Video Card container
 export const VideoCardContainer = styled.div`

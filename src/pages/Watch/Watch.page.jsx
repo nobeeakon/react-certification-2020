@@ -46,7 +46,6 @@ const Results = ({ location }) => {
     views: videoItem.statistics.viewCount,
     likes: videoItem.statistics.likeCount,
     dislikes: videoItem.statistics.dislikeCount,
-    tags: videoItem.snippet.tags,
   };
 
   return (
@@ -63,7 +62,7 @@ const Results = ({ location }) => {
             views={videoInfo.views}
             likes={videoInfo.likes}
             dislikes={videoInfo.dislikes}
-            tags={videoInfo.tags}
+            videoInfo={videoItem}
           />
         )}
       </VideoContainer>

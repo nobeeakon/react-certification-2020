@@ -5,7 +5,9 @@ import { BiDislike, BiLike } from 'react-icons/bi';
 
 import { StatsContainer, StatElement } from './VideoDetailView.styled';
 
-const Stats = ({ views, likes, dislikes }) => {
+import WatchLaterButton from '../../WatchLater/WatchLaterButton';
+
+const Stats = ({ views, likes, dislikes, videoInfo, videoId }) => {
   return (
     <StatsContainer>
       <StatElement>{views} Views</StatElement>
@@ -16,6 +18,9 @@ const Stats = ({ views, likes, dislikes }) => {
       <StatElement>
         <BiDislike />
         {dislikes}
+      </StatElement>
+      <StatElement>
+        <WatchLaterButton videoId={videoId} videoInfo={videoInfo} />
       </StatElement>
     </StatsContainer>
   );

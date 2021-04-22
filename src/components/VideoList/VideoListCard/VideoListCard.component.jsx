@@ -1,30 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { useHistory } from 'react-router-dom';
 
 import he from 'he';
 
-import { queryWatchUrl } from '../../../utils/functions/routes';
+import { queryWatchUrl, queryPrivateWatchUrl } from '../../../utils/functions/routes';
+import WatchLaterButton from '../../WatchLater/WatchLaterIconButton';
 
-import {
-  VideoCardContainer,
-  VideoThumbnails,
-  InfoContainer,
-  ThumbnailContainer,
-  Title,
-  ExtraInfoDiv,
-  Author,
-  Overlay,
-} from './VideoListCard.styled';
+import * as Styled from './VideoListCard.styled';
 
-const VideoListCard = ({ title, author, description, videoId, thumbUrl }) => {
+const VideoListCard = ({
+  title,
+  author,
+  description,
+  videoId,
+  thumbUrl,
+  isPrivate,
+  videoInfo,
+}) => {
   const history = useHistory();
+  const [isWatchLaterSelected, setIsWatchLaterSelected] = useState(false);
 
   const goToVideo = (e) => {
     e.preventDefault();
-    const watchURL = queryWatchUrl(videoId);
-    history.push(watchURL);
+    if (isPrivate) {
+      if (isWatchLaterSelected) {
+        history.push(queryPrivateWatchUrl(videoId));
+      } else {
+        history.push(queryWatchUrl(videoId));
+      }
+    } else {
+      const watchURL = queryWatchUrl(videoId);
+      history.push(watchURL);
+    }
   };
 
   const titleFull = he.decode(title);
@@ -40,21 +49,31 @@ const VideoListCard = ({ title, author, description, videoId, thumbUrl }) => {
       : descriptionFull;
 
   return (
-    <VideoCardContainer onClick={goToVideo}>
-      <ThumbnailContainer>
-        <Overlay>{shortDescription}</Overlay>
-        <VideoThumbnails src={thumbUrl} />
-      </ThumbnailContainer>
-      <InfoContainer>
-        <Title title={titleFull}>{shortTitle}</Title>
-        <ExtraInfoDiv>
-          <Author to="/" title={authorFull}>
+    <Styled.VideoCardContainer onClick={goToVideo}>
+      <Styled.ThumbnailContainer>
+        <Styled.Overlay>
+          {shortDescription}
+
+          <Styled.OverLayButtonContainer>
+            {/* { videoInfo, videoId, setIsWatchLaterSelected } */}
+            <WatchLaterButton
+              videoId={videoId}
+              videoInfo={videoInfo}
+              setIsWatchLaterSelected={setIsWatchLaterSelected}
+            />
+          </Styled.OverLayButtonContainer>
+        </Styled.Overlay>
+        <Styled.VideoThumbnails src={thumbUrl} />
+      </Styled.ThumbnailContainer>
+      <Styled.InfoContainer>
+        <Styled.Title title={titleFull}>{shortTitle}</Styled.Title>
+        <Styled.ExtraInfoDiv>
+          <Styled.Author to="/" title={authorFull}>
             {shortAuthor}
-          </Author>
-          <span />
-        </ExtraInfoDiv>
-      </InfoContainer>
-    </VideoCardContainer>
+          </Styled.Author>
+        </Styled.ExtraInfoDiv>
+      </Styled.InfoContainer>
+    </Styled.VideoCardContainer>
   );
 };
 

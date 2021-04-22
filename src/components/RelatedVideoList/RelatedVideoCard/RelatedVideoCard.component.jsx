@@ -1,38 +1,54 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 
 import he from 'he';
 
-import { FaPlay } from 'react-icons/fa';
 import { RiErrorWarningFill } from 'react-icons/ri';
 
-import { queryWatchUrl } from '../../../utils/functions/routes';
+import WatchLaterButton from '../../WatchLater/WatchLaterIconButton';
 
-import {
-  VideoCardContainer,
-  VideoThumbnails,
-  ThumbnailContainer,
-  InfoContainer,
-  Title,
-  ExtraInfoDiv,
-  ChannelTitle,
-  Overlay,
-} from './RelatedVideoCard.styled';
+import { queryWatchUrl, queryPrivateWatchUrl } from '../../../utils/functions/routes';
 
-const RelatedVideoCard = ({ title, channelTitle, thumbUrl, isAvailable, videoId }) => {
+import * as Styled from './RelatedVideoCard.styled';
+
+const RelatedVideoCard = ({
+  title,
+  channelTitle,
+  thumbUrl,
+  isAvailable,
+  videoId,
+  videoInfo,
+  isPrivate,
+}) => {
   const history = useHistory();
+  const [isWatchLaterSelected, setIsWatchLaterSelected] = useState(false);
 
   const titleFull = isAvailable ? he.decode(title) : 'Not available';
   const channelTitleFull = he.decode(channelTitle);
 
-  const PlayIcon = !isAvailable ? <RiErrorWarningFill /> : <FaPlay />;
+  const OverlayContent = !isAvailable ? (
+    <RiErrorWarningFill />
+  ) : (
+    <WatchLaterButton
+      videoId={videoId}
+      videoInfo={videoInfo}
+      setIsWatchLaterSelected={setIsWatchLaterSelected}
+    />
+  );
 
   const goToVideo = (e) => {
     e.preventDefault();
     if (isAvailable) {
-      const watchURL = queryWatchUrl(videoId);
-      history.push(watchURL);
+      if (isPrivate) {
+        if (isWatchLaterSelected) {
+          history.push(queryPrivateWatchUrl(videoId));
+        } else {
+          history.push(queryWatchUrl(videoId));
+        }
+      } else {
+        history.push(queryWatchUrl(videoId));
+      }
     }
   };
 
@@ -43,22 +59,22 @@ const RelatedVideoCard = ({ title, channelTitle, thumbUrl, isAvailable, videoId 
       : channelTitleFull;
 
   return (
-    <VideoCardContainer onClick={goToVideo} isNotAvailable={!isAvailable}>
-      <ThumbnailContainer>
-        <Overlay>{PlayIcon}</Overlay>
-        <VideoThumbnails src={thumbUrl} />
-      </ThumbnailContainer>
-      <InfoContainer>
-        <Title title={titleFull}>{shortTitle}</Title>
-        <ExtraInfoDiv>
+    <Styled.VideoCardContainer onClick={goToVideo} isNotAvailable={!isAvailable}>
+      <Styled.ThumbnailContainer>
+        <Styled.Overlay isNotAvailable={!isAvailable}>{OverlayContent}</Styled.Overlay>
+        <Styled.VideoThumbnails src={thumbUrl} />
+      </Styled.ThumbnailContainer>
+      <Styled.InfoContainer>
+        <Styled.Title title={titleFull}>{shortTitle}</Styled.Title>
+        <Styled.ExtraInfoDiv>
           {shortChannelTitle !== '' && (
-            <ChannelTitle to="/" title={channelTitleFull}>
+            <Styled.ChannelTitle to="/" title={channelTitleFull}>
               {shortChannelTitle}
-            </ChannelTitle>
+            </Styled.ChannelTitle>
           )}
-        </ExtraInfoDiv>
-      </InfoContainer>
-    </VideoCardContainer>
+        </Styled.ExtraInfoDiv>
+      </Styled.InfoContainer>
+    </Styled.VideoCardContainer>
   );
 };
 

@@ -1,7 +1,9 @@
 import React from 'react';
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent, act } from '@testing-library/react';
 
 import VideoDetailView from './VideoDetailView.component';
+
+import customRenderGlobalProviders from '../../../utils/tests/customRenders/customRenderGlobalProviders';
 
 describe('testing VideoDetail component', () => {
   const video = {
@@ -41,7 +43,7 @@ describe('testing VideoDetail component', () => {
 
   describe('Testing redenred props when short description and short tag list', () => {
     test('Render when a short description and short tag list are provided', () => {
-      const { getByRole, getByText, queryByTestId } = render(
+      const { getByText, queryByTestId } = customRenderGlobalProviders(
         <VideoDetailView
           videoId={video.videoId}
           channelTitle={video.channelTitle}
@@ -60,14 +62,11 @@ describe('testing VideoDetail component', () => {
       expect(getByText(`${video.views} Views`)).toBeInTheDocument();
       expect(getByText(video.likes)).toBeInTheDocument();
       expect(getByText(video.dislikes)).toBeInTheDocument();
-      expect(getByRole('button', { name: /tag1/i })).toBeInTheDocument();
-      expect(getByRole('button', { name: /tag2/i })).toBeInTheDocument();
-      expect(getByRole('button', { name: /tag3/i })).toBeInTheDocument();
-      expect(queryByTestId(/toggleShowExtraTags/i)).not.toBeInTheDocument();
+
       expect(queryByTestId(/toogleShowExtraInfo/i)).not.toBeInTheDocument();
     });
     test('Render when a long description and long tag list are provided', () => {
-      const { getByText, getByTestId } = render(
+      const { getByText, getByTestId } = customRenderGlobalProviders(
         <VideoDetailView
           videoId={videoLongDescriptionAndTags.videoId}
           channelTitle={videoLongDescriptionAndTags.channelTitle}
@@ -85,41 +84,14 @@ describe('testing VideoDetail component', () => {
       expect(getByText(`${video.views} Views`)).toBeInTheDocument();
       expect(getByText(video.likes.toString())).toBeInTheDocument();
       expect(getByText(video.dislikes.toString())).toBeInTheDocument();
-      expect(getByTestId(/toggleShowExtraTags/i)).toBeInTheDocument();
+
       expect(getByTestId(/toogleShowFullDescription/i)).toBeInTheDocument();
     });
   });
 
-  describe('Testing description and  tag "toogleShowMore" Buttons', () => {
-    it('should initially hide full tags list and show them when "toggleShowExtraTags" is clicked', () => {
-      const { getByTestId, getAllByText } = render(
-        <VideoDetailView
-          videoId={videoLongDescriptionAndTags.videoId}
-          channelTitle={videoLongDescriptionAndTags.channelTitle}
-          title={videoLongDescriptionAndTags.title}
-          description={videoLongDescriptionAndTags.description}
-          tags={videoLongDescriptionAndTags.tags}
-          views={videoLongDescriptionAndTags.views}
-          likes={videoLongDescriptionAndTags.likes}
-          dislikes={videoLongDescriptionAndTags.dislikes}
-        />
-      );
-
-      const toggleShowExtraTags = getByTestId(/toggleShowExtraTags/i);
-      expect(toggleShowExtraTags).toBeInTheDocument();
-
-      expect(getAllByText(/tag/i, { exact: false }).length).toBeLessThan(
-        videoLongDescriptionAndTags.tags.length
-      );
-
-      fireEvent.click(toggleShowExtraTags);
-      expect(getAllByText(/tag/i, { exact: false }).length).toBe(
-        videoLongDescriptionAndTags.tags.length
-      );
-    });
-
+  describe('Testing description  "toogleShowMore" Buttons', () => {
     it('should initially hide full description and show it when "toogleShowFullDescription" is clicked', () => {
-      const { getByTestId, getByText, queryByText } = render(
+      const { getByTestId, getByText, queryByText } = customRenderGlobalProviders(
         <VideoDetailView
           videoId={videoLongDescriptionAndTags.videoId}
           channelTitle={videoLongDescriptionAndTags.channelTitle}
@@ -142,7 +114,10 @@ describe('testing VideoDetail component', () => {
         queryByText(videoLongDescriptionAndTags.description)
       ).not.toBeInTheDocument();
 
-      fireEvent.click(toogleShowFullDescription);
+      act(() => {
+        fireEvent.click(toogleShowFullDescription);
+      });
+
       expect(getByText(videoLongDescriptionAndTags.description)).toBeInTheDocument();
     });
   });
@@ -152,7 +127,7 @@ describe('testing VideoDetail component', () => {
     const codedString = 'Wizeline&#39;s';
 
     test('channelTitle gets decoded', () => {
-      const { container } = render(
+      const { container } = customRenderGlobalProviders(
         <VideoDetailView
           videoId={video.videoId}
           channelTitle={codedString}
@@ -169,7 +144,7 @@ describe('testing VideoDetail component', () => {
     });
 
     test('title gets decoded', () => {
-      const { container } = render(
+      const { container } = customRenderGlobalProviders(
         <VideoDetailView
           videoId={video.videoId}
           channelTitle={video.channelTitle}
@@ -186,7 +161,7 @@ describe('testing VideoDetail component', () => {
     });
 
     test('description gets decoded', () => {
-      const { container } = render(
+      const { container } = customRenderGlobalProviders(
         <VideoDetailView
           videoId={video.videoId}
           title={video.title}

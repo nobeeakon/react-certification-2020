@@ -5,8 +5,6 @@ import NavBar from './NavBar.component';
 
 import GlobalContextProvider, * as GlobalProvider from '../../providers/Global/Global.provider';
 
-import AuthProvider from '../../providers/Auth';
-
 import { ROUTES } from '../../utils/functions/routes';
 
 // mocking history
@@ -24,11 +22,7 @@ afterEach(() => {
 });
 
 const NavBarProviders = ({ children }) => {
-  return (
-    <AuthProvider>
-      <GlobalContextProvider>{children}</GlobalContextProvider>
-    </AuthProvider>
-  );
+  return <GlobalContextProvider>{children}</GlobalContextProvider>;
 };
 
 const customRenderNavBar = (ui, options) =>
@@ -43,7 +37,10 @@ describe('Testing NavBar.component', () => {
       expect(queryByTestId(/icon-sun-testid/i)).not.toBeInTheDocument();
 
       const toogleDarkButton = getByTestId(/toggleTheme-button/i);
-      fireEvent.click(toogleDarkButton);
+
+      act(() => {
+        fireEvent.click(toogleDarkButton);
+      });
 
       expect(queryByTestId(/icon-moon-testid/i)).not.toBeInTheDocument();
       expect(queryByTestId(/icon-sun-testid/i)).toBeInTheDocument();
@@ -65,7 +62,9 @@ describe('Testing NavBar.component', () => {
 
       expect(mockDispatchGlobal).toBeCalledTimes(0);
       const toogleDarkButton = getByTestId(/toggleTheme-button/i);
-      fireEvent.click(toogleDarkButton);
+      act(() => {
+        fireEvent.click(toogleDarkButton);
+      });
 
       expect(mockDispatchGlobal).toBeCalledTimes(1);
     });
@@ -77,21 +76,10 @@ describe('Testing NavBar.component', () => {
 
       const homeButton = getByTestId(/home-button/i);
 
-      fireEvent.click(homeButton);
-
+      act(() => {
+        fireEvent.click(homeButton);
+      });
       expect(mockHistoryPush).toHaveBeenNthCalledWith(1, `/`);
-    });
-  });
-
-  describe('Sign in button', () => {
-    it('should go to /login, when it is clicked', () => {
-      const { getByTestId } = customRenderNavBar(<NavBar />);
-
-      const homeButton = getByTestId(/sign-in-button/i);
-
-      fireEvent.click(homeButton);
-
-      expect(mockHistoryPush).toHaveBeenNthCalledWith(1, `/login`);
     });
   });
 
@@ -119,7 +107,9 @@ describe('Testing NavBar.component', () => {
       });
       expect(input.value).toBe('23');
 
-      fireEvent.click(inputButton);
+      act(() => {
+        fireEvent.click(inputButton);
+      });
 
       expect(mockHistoryPush).toHaveBeenNthCalledWith(1, `/${ROUTES.RESULTS}`);
     });

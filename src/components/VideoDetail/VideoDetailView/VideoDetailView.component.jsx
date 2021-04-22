@@ -6,7 +6,6 @@ import he from 'he';
 import YouTubeIframe from '../YoutubeIframe/YoutubeIframe.component';
 import Stats from './Stats.component';
 import Description from './Description.component';
-import Tags from './Tags.component';
 
 import {
   MainInfoContainer,
@@ -24,7 +23,7 @@ const VideoDetailView = ({
   views,
   likes,
   dislikes,
-  tags,
+  videoInfo,
 }) => {
   const titleFull = he.decode(title);
   const channelTitleFull = he.decode(channelTitle);
@@ -32,15 +31,21 @@ const VideoDetailView = ({
   return (
     <div>
       <YoutubeIframeContainer>
-        <YouTubeIframe videoId={videoId} />
+        <YouTubeIframe videoId={videoId} title={titleFull} />
       </YoutubeIframeContainer>
       <MainInfoContainer>
         <Title>{titleFull}</Title>
-        <Stats views={views} likes={likes} dislikes={dislikes} />
+        <Stats
+          views={views}
+          likes={likes}
+          dislikes={dislikes}
+          videoId={videoId}
+          videoInfo={videoInfo}
+        />
       </MainInfoContainer>
       <InfoContainer>
         <ChannelTitle>{channelTitleFull}</ChannelTitle>
-        {tags.length > 0 && <Tags tags={tags} />}
+
         <Description description={description} />
       </InfoContainer>
     </div>
@@ -55,7 +60,6 @@ VideoDetailView.propTypes = {
   views: PropTypes.string,
   dislikes: PropTypes.string,
   likes: PropTypes.string,
-  tags: PropTypes.arrayOf(PropTypes.string),
 };
 
 VideoDetailView.defaultProps = {
@@ -65,7 +69,6 @@ VideoDetailView.defaultProps = {
   views: '0',
   dislikes: '0',
   likes: '0',
-  tags: [],
 };
 
 export default VideoDetailView;
