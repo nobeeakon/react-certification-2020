@@ -9,6 +9,8 @@ const BASE_URL = 'https://www.googleapis.com/youtube/v3';
 const SEARCH_URL = `${BASE_URL}/search`;
 const VIDEO_INFO_URL = `${BASE_URL}/videos`;
 
+const mockedIsMountedRef = { current: true };
+
 describe('Testing useVideo custom Hook', () => {
   const apiServer = setupServer(
     rest.get(SEARCH_URL, (req, res, ctx) => {
@@ -52,12 +54,11 @@ describe('Testing useVideo custom Hook', () => {
 
     test('After fetching, videoList instanceof Array, isLoading = false', async () => {
       const { result, waitForNextUpdate } = renderHook(() =>
-        useVideos(SEARCH_TERM, REQ_TYPE)
+        useVideos(SEARCH_TERM, REQ_TYPE, mockedIsMountedRef)
       );
 
-      expect(result.current.videoList).toBeNull();
+      expect(result.current.videoList instanceof Array).toBe(true);
       expect(result.current.isLoading).toBe(true);
-
       await waitForNextUpdate();
 
       expect(result.current.videoList instanceof Array).toBe(true);
@@ -71,10 +72,10 @@ describe('Testing useVideo custom Hook', () => {
 
     test('After fetching, videoList instanceof Array, isLoading = false', async () => {
       const { result, waitForNextUpdate } = renderHook(() =>
-        useVideos(VIDEO_ID, REQ_TYPE)
+        useVideos(VIDEO_ID, REQ_TYPE, mockedIsMountedRef)
       );
 
-      expect(result.current.videoList).toBeNull();
+      expect(result.current.videoList instanceof Array).toBe(true);
       expect(result.current.isLoading).toBe(true);
 
       await waitForNextUpdate();
@@ -90,26 +91,15 @@ describe('Testing useVideo custom Hook', () => {
 
     test('After fetching, videoList instanceof Array, isLoading = false', async () => {
       const { result, waitForNextUpdate } = renderHook(() =>
-        useVideos(VIDEO_ID, REQ_TYPE)
+        useVideos(VIDEO_ID, REQ_TYPE, mockedIsMountedRef)
       );
 
-      expect(result.current.videoList).toBeNull();
+      expect(result.current.videoList instanceof Array).toBe(true);
       expect(result.current.isLoading).toBe(true);
 
       await waitForNextUpdate();
 
       expect(result.current.videoList instanceof Array).toBe(true);
-      expect(result.current.isLoading).toBe(false);
-    });
-  });
-
-  describe('testing other action not listed in REQUEST_TYPE', () => {
-    const REQ_TYPE = 'other';
-    const VIDEO_ID = 'Ks-_Mh1QhMc';
-
-    test('After invalid fetching type, videoList =  null ,  isLoading = false', () => {
-      const { result } = renderHook(() => useVideos(VIDEO_ID, REQ_TYPE));
-      expect(result.current.videoList).toBeNull();
       expect(result.current.isLoading).toBe(false);
     });
   });

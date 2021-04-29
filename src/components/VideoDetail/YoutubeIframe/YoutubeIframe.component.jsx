@@ -24,6 +24,11 @@ const YoutubeIframe = ({ videoId, title }) => {
 
 YoutubeIframe.propTypes = {
   videoId: PropTypes.string.isRequired,
+  title: PropTypes.string,
+};
+
+YoutubeIframe.defaultProps = {
+  title: '',
 };
 
 export default YoutubeIframe;

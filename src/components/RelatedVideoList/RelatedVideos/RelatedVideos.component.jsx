@@ -7,16 +7,24 @@ import RelatedVideosPresenter from './RelatedVideos.presenter';
 
 import { REQUEST_API_TYPES } from '../../../utils/constants';
 
-import { NoVideoFound } from './RelatedVideos.styled';
+import * as Styled from './RelatedVideos.styled';
 
-const RelatedVideos = ({ relatedToVideoId, isPrivate }) => {
-  const REQ_TYPE = REQUEST_API_TYPES.SEARCH_RELATED_VIDEOS;
-  const { videoList, isLoading } = useVideos(relatedToVideoId, REQ_TYPE);
+import useIsMountedRef from '../../../utils/hooks/useIsMountedRef';
 
-  if (isLoading) return <NoVideoFound>Loading...</NoVideoFound>;
-  if (!videoList) return null;
+const REQ_TYPE = REQUEST_API_TYPES.SEARCH_RELATED_VIDEOS;
 
-  return <RelatedVideosPresenter videoList={videoList} isPrivate={isPrivate} />;
+const RelatedVideos = ({ relatedToVideoId }) => {
+  const isMountedRef = useIsMountedRef();
+  const { videoList, isLoading, error } = useVideos(
+    relatedToVideoId,
+    REQ_TYPE,
+    isMountedRef
+  );
+
+  if (isLoading) return <Styled.Message>Loading...</Styled.Message>;
+  if (error) return <Styled.Message>Something went wrong :( </Styled.Message>;
+
+  return <RelatedVideosPresenter videoList={videoList} />;
 };
 
 RelatedVideos.propTypes = {

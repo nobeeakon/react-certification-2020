@@ -12,37 +12,36 @@ import * as Styled from './VideoListCard.styled';
 
 const VideoListCard = ({
   title,
-  author,
+  channelTitle,
   description,
   videoId,
   thumbUrl,
-  isPrivate,
+  isInPrivateRoute,
   videoInfo,
+  removeThisItem,
 }) => {
   const history = useHistory();
-  const [isWatchLaterSelected, setIsWatchLaterSelected] = useState(false);
+  const [isWatchLaterSelected, setIsWatchLaterSelected] = useState(true);
 
   const goToVideo = (e) => {
     e.preventDefault();
-    if (isPrivate) {
-      if (isWatchLaterSelected) {
-        history.push(queryPrivateWatchUrl(videoId));
-      } else {
-        history.push(queryWatchUrl(videoId));
-      }
+    if (isInPrivateRoute) {
+      // can safely do this because only selected are shown
+      history.push(queryPrivateWatchUrl(videoId));
     } else {
-      const watchURL = queryWatchUrl(videoId);
-      history.push(watchURL);
+      history.push(queryWatchUrl(videoId));
     }
   };
 
   const titleFull = he.decode(title);
-  const authorFull = he.decode(author);
+  const channelTitleFull = he.decode(channelTitle);
   const descriptionFull = he.decode(description);
 
   const shortTitle = titleFull.length > 55 ? `${titleFull.slice(0, 52)}...` : titleFull;
-  const shortAuthor =
-    authorFull.length > 55 ? `${authorFull.slice(0, 52)}...` : authorFull;
+  const shortchannelTitle =
+    channelTitleFull.length > 55
+      ? `${channelTitleFull.slice(0, 52)}...`
+      : channelTitleFull;
   const shortDescription =
     descriptionFull.length > 200
       ? `${descriptionFull.slice(0, 100)}...`
@@ -55,11 +54,13 @@ const VideoListCard = ({
           {shortDescription}
 
           <Styled.OverLayButtonContainer>
-            {/* { videoInfo, videoId, setIsWatchLaterSelected } */}
             <WatchLaterButton
               videoId={videoId}
               videoInfo={videoInfo}
+              isWatchLaterSelected={isWatchLaterSelected}
               setIsWatchLaterSelected={setIsWatchLaterSelected}
+              removeVideoItem={removeThisItem}
+              isInPrivateRoute={isInPrivateRoute}
             />
           </Styled.OverLayButtonContainer>
         </Styled.Overlay>
@@ -68,9 +69,9 @@ const VideoListCard = ({
       <Styled.InfoContainer>
         <Styled.Title title={titleFull}>{shortTitle}</Styled.Title>
         <Styled.ExtraInfoDiv>
-          <Styled.Author to="/" title={authorFull}>
-            {shortAuthor}
-          </Styled.Author>
+          <Styled.ChannelTitle title={channelTitleFull}>
+            {shortchannelTitle}
+          </Styled.ChannelTitle>
         </Styled.ExtraInfoDiv>
       </Styled.InfoContainer>
     </Styled.VideoCardContainer>
@@ -79,7 +80,7 @@ const VideoListCard = ({
 
 VideoListCard.propTypes = {
   title: PropTypes.string,
-  author: PropTypes.string,
+  channelTitle: PropTypes.string,
   description: PropTypes.string,
   thumbUrl: PropTypes.string,
   videoId: PropTypes.string.isRequired,
@@ -87,7 +88,7 @@ VideoListCard.propTypes = {
 
 VideoListCard.defaultProps = {
   title: '',
-  author: '',
+  channelTitle: '',
   description: '',
   thumbUrl: '',
 };

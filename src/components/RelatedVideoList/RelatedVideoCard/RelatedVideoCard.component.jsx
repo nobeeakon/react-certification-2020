@@ -19,10 +19,11 @@ const RelatedVideoCard = ({
   isAvailable,
   videoId,
   videoInfo,
-  isPrivate,
+  isInPrivateRoute,
+  removeThisItem,
 }) => {
   const history = useHistory();
-  const [isWatchLaterSelected, setIsWatchLaterSelected] = useState(false);
+  const [isWatchLaterSelected, setIsWatchLaterSelected] = useState(true);
 
   const titleFull = isAvailable ? he.decode(title) : 'Not available';
   const channelTitleFull = he.decode(channelTitle);
@@ -33,22 +34,27 @@ const RelatedVideoCard = ({
     <WatchLaterButton
       videoId={videoId}
       videoInfo={videoInfo}
+      isWatchLaterSelected={isWatchLaterSelected}
+      isInPrivateRoute={isInPrivateRoute}
       setIsWatchLaterSelected={setIsWatchLaterSelected}
+      removeVideoItem={removeThisItem}
     />
   );
 
   const goToVideo = (e) => {
     e.preventDefault();
-    if (isAvailable) {
-      if (isPrivate) {
-        if (isWatchLaterSelected) {
-          history.push(queryPrivateWatchUrl(videoId));
-        } else {
-          history.push(queryWatchUrl(videoId));
-        }
-      } else {
-        history.push(queryWatchUrl(videoId));
-      }
+    // do nothing if not available
+    if (!isAvailable) return;
+
+    // user not logged in
+    if (!isInPrivateRoute) {
+      history.push(queryWatchUrl(videoId));
+      return;
+    }
+
+    // user logged in
+    if (isWatchLaterSelected) {
+      history.push(queryPrivateWatchUrl(videoId));
     }
   };
 

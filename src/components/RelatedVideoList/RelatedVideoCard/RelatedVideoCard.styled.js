@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 
-import StyledLink from '../../StyledComponents/StyledLink';
 import * as breakpoints from '../../../utils/deviceBreakpoints';
 
 const transition = '0.06s ease';
@@ -121,8 +120,9 @@ export const ExtraInfoDiv = styled.div`
   bottom: 0;
 `;
 
-// Author, should be placed within ExtraInfoDiv
-export const ChannelTitle = styled(StyledLink)`
+// channelTitle, should be placed within ExtraInfoDiv
+export const ChannelTitle = styled.div`
+  color: ${(props) => props.theme.contrast2};
   font-style: italic;
   font-size: x-small;
 `;

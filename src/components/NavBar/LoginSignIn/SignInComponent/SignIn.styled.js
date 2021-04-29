@@ -34,8 +34,8 @@ export const RequiredField = styled.span`
   color: ${(props) => props.theme.warning1};
 `;
 
-export const UserNameInput = styled.input.attrs(() => ({
-  type: 'text',
+export const UserEmailInput = styled.input.attrs(() => ({
+  type: 'email',
 }))(
   ({ theme }) => `
     padding: 2px;
@@ -109,4 +109,13 @@ export const ButtonContainer = styled.div`
   justify-content: center;
 
   margin-top: 10px;
+`;
+
+export const Success = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
+  color: ${(props) => props.theme.general.dark};
+
+  font-size: normal;
 `;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import LoginModal from '../Login/LogInModal/LoginModal';
+import LoginModal from '../LoginSignIn/LogInModal/LoginModal';
 
 import * as Styled from '../NavBar.styled';
 
@@ -16,12 +16,15 @@ const SignIn = () => {
     e.preventDefault();
     setIsLogInModalOpen(false);
   };
+
   return (
     <>
       <Styled.SignIn onClick={handleSignIn} data-testid="sign-in-button">
         Log In
       </Styled.SignIn>
-      <LoginModal isModalOpen={isLogInModalOpen} closeModal={closeModal} />
+      {isLogInModalOpen && (
+        <LoginModal isModalOpen={isLogInModalOpen} closeModal={closeModal} />
+      )}
     </>
   );
 };

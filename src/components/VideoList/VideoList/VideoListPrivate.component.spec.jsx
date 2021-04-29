@@ -1,10 +1,10 @@
 import React from 'react';
 
-import RelatedPrivateVideos from './RelatedVideosPrivate.component';
+import customRenderGlobalProviders from '../../../utils/tests/customRenders/customRenderGlobalProviders';
+
+import VideoListPrivate from './VideoListPrivate.component';
 
 import { storage } from '../../../utils/storage';
-
-import customRenderGlobalProviders from '../../../utils/tests/customRenders/customRenderGlobalProviders';
 
 jest.spyOn(storage, 'get');
 jest.spyOn(storage, 'set');
@@ -13,14 +13,8 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
-describe('Related private videos', () => {
-  it('should call storage', () => {
-    storage.get.mockReturnValue({ videoId1: {}, videoId2: {} });
-    customRenderGlobalProviders(<RelatedPrivateVideos relatedToVideoId="videoId2" />);
-    expect(storage.get).toBeCalledTimes(1);
-  });
-
-  it('should remove selected element from displayed list', () => {
+describe('Testing VideoList', () => {
+  it('should call storage and display the list elements', () => {
     const snippet = {
       publishedAt: '2019-09-30T23:54:32Z',
       channelId: 'UCPGzT4wecuWM0BH9mPiulXg',
@@ -72,13 +66,11 @@ describe('Related private videos', () => {
     };
     storage.get.mockReturnValue(returnedObj);
 
-    const { getByText, queryByText } = customRenderGlobalProviders(
-      <RelatedPrivateVideos relatedToVideoId="nmXMgqjQzlsas" />
-    );
+    const { getByText } = customRenderGlobalProviders(<VideoListPrivate />);
 
     expect(storage.get).toBeCalled();
 
-    expect(queryByText(/title1/i)).not.toBeInTheDocument();
+    expect(getByText(/title1/i)).toBeInTheDocument();
     expect(getByText(/title2/i)).toBeInTheDocument();
   });
 });

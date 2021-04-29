@@ -80,33 +80,6 @@ describe('Testing WatchLater Button', () => {
       expect(watchLaterButton).toBeInTheDocument();
     });
 
-    it('changes icon when clicked', () => {
-      const mockDispatchGlobal = jest.fn();
-      jest.spyOn(GlobalProvider, 'useGlobalContext').mockImplementation(() => ({
-        dispatchGlobal: mockDispatchGlobal,
-        globalState: STATE_LOGGED_IN,
-      }));
-
-      const { getByTestId, queryByTestId } = customRenderGlobalProviders(
-        <WatchLaterButton
-          videoInfo={mockedVideoInfo}
-          videoId="videoId"
-          setIsWatchLaterSelected={setIsWatchLaterSelected}
-        />
-      );
-
-      expect(queryByTestId(/clock-icon-testid/i)).toBeInTheDocument();
-      expect(queryByTestId(/checked-icon-testid/i)).not.toBeInTheDocument();
-
-      const watchLaterButton = getByTestId(/watch-later-button/i);
-      act(() => {
-        fireEvent.click(watchLaterButton);
-      });
-
-      expect(queryByTestId(/clock-icon-testid/i)).not.toBeInTheDocument();
-      expect(queryByTestId(/checked-icon-testid/i)).toBeInTheDocument();
-    });
-
     it('Calls  storage.get() when first loaded and when clicked', () => {
       const mockDispatchGlobal = jest.fn();
       jest.spyOn(GlobalProvider, 'useGlobalContext').mockImplementation(() => ({

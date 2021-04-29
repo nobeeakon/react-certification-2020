@@ -34,3 +34,13 @@ export const CloseModalContainer = styled.div`
   display: flex;
   justify-content: flex-end;
 `;
+
+export const ChangeContentTypeButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
+`;
+
+export const ChangeContentTypeButton = styled(StyledButton)`
+  text-decoration: underline;
+`;

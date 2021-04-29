@@ -23,3 +23,10 @@ export const VideoContainer = styled.div`
 `;
 
 export const RelatedVideoListContainer = styled.div``;
+
+export const Message = styled.div`
+  color: ${(props) => props.theme.contrast1};
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
+`;

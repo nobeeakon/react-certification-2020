@@ -11,8 +11,7 @@ import WatchPage from '../../pages/Watch';
 import Results from '../../pages/Results';
 import NotFoundPage from '../../pages/NotFound';
 
-import WatchPrivatePage from '../../pages/WatchPrivate';
-import LibraryPrivatePage from '../../pages/Library';
+import PrivateRoutes from './PrivateRoutes/PrivateRoutes';
 
 import Private from '../Private';
 import Layout from '../Layout';
@@ -38,13 +37,10 @@ function App() {
                 <WatchPage />
               </Route>
 
-              <Private exact path={`/${ROUTES.LIBRARY}`}>
-                <LibraryPrivatePage />
+              <Private path={`/${ROUTES.PRIVATE}`}>
+                <PrivateRoutes />
               </Private>
-              <Private exact path={`/${ROUTES.PRIVATE_WATCH}`}>
-                <WatchPrivatePage />
-              </Private>
-              {/* TODO check if this is working correctly */}
+
               <Route path="*">
                 <NotFoundPage />
               </Route>

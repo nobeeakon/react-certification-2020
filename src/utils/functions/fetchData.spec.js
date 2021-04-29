@@ -8,6 +8,8 @@ const BASE_URL = 'https://www.googleapis.com/youtube/v3';
 const SEARCH_URL = `${BASE_URL}/search`;
 const VIDEO_INFO_URL = `${BASE_URL}/videos`;
 
+const mokedSource = jest.fn();
+
 describe('Testing youtube API requests', () => {
   const apiServer = setupServer(
     rest.get(SEARCH_URL, (req, res, ctx) => {
@@ -47,19 +49,19 @@ describe('Testing youtube API requests', () => {
 
   describe('Testing fetchVideoListByTerm and fetchRelatedVideos functions', () => {
     test('fetchVideoListByTerm should return an Array', async () => {
-      const result = await fetchVideoListByTerm('wizeline');
+      const result = await fetchVideoListByTerm('wizeline', mokedSource);
       expect(result instanceof Array).toBe(true);
     });
 
     test('fetchRelatedVideos should return an Array', async () => {
-      const result = await fetchRelatedVideos('wizeline');
+      const result = await fetchRelatedVideos('wizeline', mokedSource);
       expect(result instanceof Array).toBe(true);
     });
   });
 
   describe('Testing fetchfetchVideoInfo function', () => {
     test('fetchVideoInfo should return an Array', async () => {
-      const result = await fetchVideoInfo('Ks-_Mh1QhMc');
+      const result = await fetchVideoInfo('Ks-_Mh1QhMc', mokedSource);
       expect(result instanceof Array).toBe(true);
     });
   });

@@ -1,7 +1,5 @@
 import React from 'react';
 
-/* import { withRouter } from 'react-router';
-import queryString from 'query-string'; */
 import { Redirect } from 'react-router-dom';
 
 import { useGlobalContext } from '../../providers/Global/Global.provider';

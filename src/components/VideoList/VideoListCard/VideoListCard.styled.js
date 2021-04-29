@@ -1,7 +1,5 @@
 import styled from 'styled-components';
 
-import StyledLink from '../../StyledComponents/StyledLink';
-
 const transition = '0.06s ease';
 
 export const Overlay = styled.div`
@@ -89,10 +87,11 @@ export const Title = styled.p(
 
 // Extra information, should be placed within InfoDiv
 export const ExtraInfoDiv = styled.div`
-  font-size: 0.6rem;
+  font-size: small;
 `;
 
-// Author, should be placed within ExtraInfoDiv
-export const Author = styled(StyledLink)`
+// channelTitle, should be placed within ExtraInfoDiv
+export const ChannelTitle = styled.div`
+  color: ${(props) => props.theme.contrast2};
   font-style: italic;
 `;

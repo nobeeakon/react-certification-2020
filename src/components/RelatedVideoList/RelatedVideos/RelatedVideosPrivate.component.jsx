@@ -6,7 +6,7 @@ import RelatedVideosPresenter from './RelatedVideos.presenter';
 import { storage } from '../../../utils/storage';
 import { SAVED_WATCH_LATER_VIDEOS_STORAGE_KEY } from '../../../utils/constants';
 
-import { NoVideoFound } from './RelatedVideos.styled';
+import * as Styled from './RelatedVideos.styled';
 
 const RelatedPrivateVideos = ({ relatedToVideoId }) => {
   const [videoList, setVideoList] = useState(null);
@@ -14,15 +14,27 @@ const RelatedPrivateVideos = ({ relatedToVideoId }) => {
   useEffect(() => {
     const storedVideos = storage.get(SAVED_WATCH_LATER_VIDEOS_STORAGE_KEY);
 
-    // remove video item from stored videos
+    // to display the rest of the videos,
+    // remove video item from stored videos list
     delete storedVideos[relatedToVideoId];
 
     setVideoList(Object.values(storedVideos));
   }, [relatedToVideoId]);
 
-  if (!videoList) return <NoVideoFound>Loading...</NoVideoFound>;
+  const removeItem = (id) => {
+    const newList = videoList.filter((video) => video.id.videoId !== id);
+    setVideoList(newList);
+  };
 
-  return <RelatedVideosPresenter videoList={videoList} isPrivate />;
+  if (!videoList) return <Styled.Message>Loading...</Styled.Message>;
+
+  return (
+    <RelatedVideosPresenter
+      videoList={videoList}
+      removeItem={removeItem}
+      isInPrivateRoute
+    />
+  );
 };
 
 RelatedPrivateVideos.propTypes = {

@@ -13,7 +13,7 @@ describe('Testing VideoCard.component', () => {
           videoId="videoId"
           thumbUrl="image"
           title={video.title}
-          author="author"
+          channelTitle="channelTitle"
           description="description"
         />
       );
@@ -21,14 +21,14 @@ describe('Testing VideoCard.component', () => {
       expect(container).toHaveTextContent(/description/i);
     });
 
-    test('renders when props.author is null', () => {
+    test('renders when props.channelTitle is null', () => {
       const video = {};
       const { container } = customRenderGlobalProviders(
         <VideoListCard
           videoId="videoId"
           thumbUrl="image"
           title="title"
-          author={video.author}
+          channelTitle={video.channelTitle}
           description="description"
         />
       );
@@ -43,12 +43,12 @@ describe('Testing VideoCard.component', () => {
           videoId="videoId"
           thumbUrl="image"
           title="title"
-          author="author"
+          channelTitle="channelTitle"
           description={video.description}
         />
       );
 
-      expect(container).toHaveTextContent(/author/i);
+      expect(container).toHaveTextContent(/channelTitle/i);
     });
   });
 
@@ -61,7 +61,7 @@ describe('Testing VideoCard.component', () => {
           videoId="videoId"
           thumbUrl="image"
           title={codedString}
-          author="author"
+          channelTitle="channelTitle"
           description="description"
         />
       );
@@ -69,13 +69,13 @@ describe('Testing VideoCard.component', () => {
       expect(container).toHaveTextContent(/Wizeline's/i);
     });
 
-    test('author gets decoded', () => {
+    test('channelTitle gets decoded', () => {
       const { container } = customRenderGlobalProviders(
         <VideoListCard
           videoId="videoId"
           thumbUrl="image"
           title="title"
-          author={codedString}
+          channelTitle={codedString}
           description="description"
         />
       );
@@ -89,7 +89,7 @@ describe('Testing VideoCard.component', () => {
           videoId="videoId"
           thumbUrl="image"
           title="title"
-          author="author"
+          channelTitle="channelTitle"
           description={codedString}
         />
       );

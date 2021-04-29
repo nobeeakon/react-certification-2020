@@ -1,31 +1,31 @@
-import React, { useState } from 'react';
-
-import loginApi from '../../../../utils/mocks/mockedLogin';
+import React, { useState, useEffect } from 'react';
 
 import { useGlobalContext } from '../../../../providers/Global/Global.provider';
 import { ACTIONS as GLOBAL_ACTIONS } from '../../../../providers/Global/useGlobalReducer';
 
+import { auth } from '../../../../utils/authentication/firebase';
+
 import * as Styled from './Login.styled';
 
-const Login = ({ closeModal }) => {
+const Login = ({ closeModal, setButtonMessage }) => {
   const { globalState, dispatchGlobal } = useGlobalContext();
   const { isAuthenticated } = globalState;
-  const [userName, setUserName] = useState('');
+  const [email, setEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
-  const [isUserNameFilled, setIsUserNameFilled] = useState(false);
-  const [isPassWordFilled, setIsPasswordFilled] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const [errorOnSubmit, setErrorOnSubmit] = useState(false);
-  const [isInvalidUSer, setIsInvalidUser] = useState(false);
 
-  const handleUserName = (e) => {
+  useEffect(() => {
+    setButtonMessage('Register new account');
+  }, [setButtonMessage]);
+
+  const handleUserEmail = (e) => {
     e.preventDefault();
     e.stopPropagation();
 
-    const tmpUserName = e.target.value.trim();
-    setUserName(tmpUserName);
-
-    setIsUserNameFilled(Boolean(tmpUserName.length));
+    const tmpEmail = e.target.value.trim();
+    setEmail(tmpEmail);
   };
 
   if (isAuthenticated) closeModal();
@@ -36,23 +36,25 @@ const Login = ({ closeModal }) => {
 
     const tmpPassword = e.target.value;
     setUserPassword(tmpPassword);
-
-    setIsPasswordFilled(Boolean(tmpPassword.length));
   };
+
+  const isEmailAndPasswordFilled = email.length > 0 && userPassword.length > 0;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     event.stopPropagation();
 
-    if (!isUserNameFilled || !isPassWordFilled) {
+    if (!isEmailAndPasswordFilled) {
       setErrorOnSubmit(true);
     } else {
       try {
-        const userData = await loginApi(userName, userPassword);
+        const userData = await auth.signInWithEmailAndPassword(email, userPassword);
+        userData.avatarUrl =
+          'https://media.glassdoor.com/sqll/868055/wizeline-squarelogo-1473976610815.png';
         dispatchGlobal({ type: GLOBAL_ACTIONS.LOGIN, payload: userData });
       } catch (error) {
-        setIsInvalidUser(true);
-        setUserName('');
+        setErrorMessage(error.message);
+        setEmail('');
         setUserPassword('');
         setErrorOnSubmit(true);
       }
@@ -63,18 +65,18 @@ const Login = ({ closeModal }) => {
     <div>
       <Styled.LoginContainer>
         <Styled.StyledForm onSubmit={handleSubmit}>
-          {errorOnSubmit && isInvalidUSer && (
-            <Styled.AlertFlag>Invalid Name or Password</Styled.AlertFlag>
+          {errorOnSubmit && (
+            <Styled.AlertFlag>{errorMessage || 'Something went wrong '}</Styled.AlertFlag>
           )}
 
           <Styled.InputField>
             <Styled.Label htmlFor="user-name">
-              Name<Styled.RequiredField>*</Styled.RequiredField>:
+              Email<Styled.RequiredField>*</Styled.RequiredField>:
             </Styled.Label>
-            <Styled.UserNameInput
+            <Styled.UserEmailInput
               id="user-name"
-              onChange={handleUserName}
-              value={userName}
+              onChange={handleUserEmail}
+              value={email}
             />
           </Styled.InputField>
 
@@ -90,7 +92,7 @@ const Login = ({ closeModal }) => {
           </Styled.InputField>
 
           <Styled.ButtonContainer>
-            <Styled.InputButton disabled={!isPassWordFilled || !isUserNameFilled}>
+            <Styled.InputButton disabled={!isEmailAndPasswordFilled}>
               Log-in
             </Styled.InputButton>
           </Styled.ButtonContainer>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 import { AiFillClockCircle } from 'react-icons/ai';
 import { ImCheckboxChecked } from 'react-icons/im';
@@ -9,9 +9,15 @@ import { useGlobalContext } from '../../../providers/Global/Global.provider';
 
 import * as Styled from './WatchLaterIconButton.styled';
 
-const WatchLaterButton = ({ videoInfo, videoId, setIsWatchLaterSelected }) => {
+const WatchLaterButton = ({
+  videoInfo,
+  videoId,
+  isWatchLaterSelected,
+  setIsWatchLaterSelected,
+  isInPrivateRoute,
+  removeVideoItem,
+}) => {
   const { globalState } = useGlobalContext();
-  const [isVideoSaved, setIsVideoSaved] = useState(false);
 
   const { isAuthenticated } = globalState;
 
@@ -19,13 +25,8 @@ const WatchLaterButton = ({ videoInfo, videoId, setIsWatchLaterSelected }) => {
     const videosStored = storage.get(SAVED_WATCH_LATER_VIDEOS_STORAGE_KEY) || {};
 
     const tmpIsVideoStored = Boolean(videosStored[videoId]);
-    setIsVideoSaved(tmpIsVideoStored);
-  }, [videoId]);
-
-  // update
-  useEffect(() => {
-    setIsWatchLaterSelected(isVideoSaved);
-  }, [isVideoSaved, setIsWatchLaterSelected]);
+    setIsWatchLaterSelected(tmpIsVideoStored);
+  }, [videoId, setIsWatchLaterSelected]);
 
   // only show when  logged in
   if (!isAuthenticated) return null;
@@ -37,16 +38,18 @@ const WatchLaterButton = ({ videoInfo, videoId, setIsWatchLaterSelected }) => {
 
     if (videosStored[videoId]) {
       delete videosStored[videoId];
-      setIsVideoSaved(false);
+      setIsWatchLaterSelected(false);
+      if (isInPrivateRoute) removeVideoItem(); // remove from shown list
     } else {
       videosStored[videoId] = videoInfo;
-      setIsVideoSaved(true);
+      setIsWatchLaterSelected(true);
     }
 
+    // local storage
     storage.set(SAVED_WATCH_LATER_VIDEOS_STORAGE_KEY, videosStored);
   };
 
-  const iconTitle = isVideoSaved
+  const iconTitle = isWatchLaterSelected
     ? 'Remove from Watch Later List'
     : 'Add to Watch Later List';
 
@@ -55,7 +58,7 @@ const WatchLaterButton = ({ videoInfo, videoId, setIsWatchLaterSelected }) => {
       onClick={handleWatchLater}
       data-testid="watch-later-button"
     >
-      {!isVideoSaved ? (
+      {!isWatchLaterSelected ? (
         <AiFillClockCircle data-testid="clock-icon-testid" title={iconTitle} />
       ) : (
         <ImCheckboxChecked title={iconTitle} data-testid="checked-icon-testid" />
