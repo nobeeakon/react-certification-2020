@@ -5,6 +5,9 @@ const API_SECRET_KEY = process.env.REACT_APP_YT_API_KEY;
 const BASE_URL = 'https://www.googleapis.com/youtube/v3';
 const MAX_RESULTS = 25;
 
+/* const cancelToken = axios.CancelToken;
+export const source = cancelToken.source(); */
+
 const youtubeAPI = axios.create({
   baseURL: BASE_URL,
   params: {
@@ -14,7 +17,7 @@ const youtubeAPI = axios.create({
 
 // 'https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=surfing&key=[YOUR_API_KEY]'
 // TODO: maybe at some point add functionality to change type param (videos, playlists, channels)
-export const fetchVideoListByTerm = async (searchTerm) => {
+export const fetchVideoListByTerm = async (searchTerm, source) => {
   try {
     const response = await youtubeAPI.get('/search', {
       params: {
@@ -23,6 +26,7 @@ export const fetchVideoListByTerm = async (searchTerm) => {
         q: searchTerm,
         type: 'video',
       },
+      cancelToken: source.token,
     });
 
     // filter out all non available videos
@@ -31,13 +35,18 @@ export const fetchVideoListByTerm = async (searchTerm) => {
     );
     return itemsAvailable;
   } catch (e) {
-    console.log(`Error while fetching videos related with the TERM: ${searchTerm}. `, e);
-    return null;
+    if (!axios.isCancel(e)) {
+      console.log(
+        `Error while fetching videos related with the TERM: ${searchTerm}. `,
+        e
+      );
+      return null;
+    }
   }
 };
 
 // 'https://youtube.googleapis.com/youtube/v3/search?part=snippet&relatedToVideoId=Ks-_Mh1QhMc&type=video&key=[YOUR_API_KEY]' \
-export const fetchRelatedVideos = async (videoId) => {
+export const fetchRelatedVideos = async (videoId, source) => {
   try {
     const response = await youtubeAPI.get('/search', {
       params: {
@@ -46,28 +55,34 @@ export const fetchRelatedVideos = async (videoId) => {
         relatedToVideoId: videoId,
         type: 'video',
       },
+      cancelToken: source.token,
     });
 
     return response.data.items;
   } catch (e) {
-    console.log(`Error while fetching related videos, of the videoId: ${videoId}. `, e);
-    return null;
+    if (!axios.isCancel(e)) {
+      console.log(`Error while fetching related videos, of the videoId: ${videoId}. `, e);
+      return null;
+    }
   }
 };
 
 // https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=Ks-_Mh1QhMc&key=[YOUR_API_KEY]
-export const fetchVideoInfo = async (videoId) => {
+export const fetchVideoInfo = async (videoId, source) => {
   try {
     const response = await youtubeAPI.get('/videos', {
       params: {
         part: ['snippet', 'contentDetails', 'statistics'].join(', '),
         id: videoId,
       },
+      cancelToken: source.token,
     });
 
     return response.data.items;
   } catch (e) {
-    console.log(`Error while fetching video Info, of the videoId: ${videoId}. `, e);
-    return null;
+    if (!axios.isCancel(e)) {
+      console.log(`Error while fetching video Info, of the videoId: ${videoId}. `, e);
+      return null;
+    }
   }
 };

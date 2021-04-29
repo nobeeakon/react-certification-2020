@@ -1,44 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { VideoContainer, NoVideoFound } from './VideoList.styled';
-import VideoListCard from '../VideoListCard';
+import * as Styled from './VideoList.styled';
 
 import useVideos from '../../../utils/hooks/useVideos';
 
-import getVideoKey from '../../../utils/functions/getVideoKey';
-
 import { REQUEST_API_TYPES } from '../../../utils/constants';
 
+import CardListPresenter from './VideoList.presenter';
+import useIsMountedRef from '../../../utils/hooks/useIsMountedRef';
+
+const REQ_TYPE = REQUEST_API_TYPES.SEARCH_BY_TERM;
+
 const CardList = ({ searchString }) => {
-  const REQ_TYPE = REQUEST_API_TYPES.SEARCH_BY_TERM;
-  const { videoList, isLoading } = useVideos(searchString, REQ_TYPE);
+  const isMountedRef = useIsMountedRef();
+  const { videoList, isLoading, error } = useVideos(searchString, REQ_TYPE, isMountedRef);
 
-  if (isLoading) return <NoVideoFound>Loading...</NoVideoFound>;
-  if (!videoList) return null; // TODO change this to error
+  if (isLoading) return <Styled.Message>Loading...</Styled.Message>;
+  if (error) return <Styled.Message>Somethig went wrong :( </Styled.Message>;
 
-  return (
-    <div>
-      {videoList.length === 0 ? (
-        <NoVideoFound> No Video Found :( </NoVideoFound>
-      ) : (
-        <VideoContainer>
-          {videoList.map((video) =>
-            video.id.videoId ? (
-              <VideoListCard
-                videoId={video.id.videoId}
-                key={getVideoKey(video)}
-                thumbUrl={video?.snippet?.thumbnails?.medium?.url}
-                title={video?.snippet?.title}
-                author={video?.snippet?.channelTitle}
-                description={video?.snippet?.description}
-              />
-            ) : null
-          )}
-        </VideoContainer>
-      )}
-    </div>
-  );
+  return <CardListPresenter videoList={videoList} />;
 };
 
 CardList.propTypes = {

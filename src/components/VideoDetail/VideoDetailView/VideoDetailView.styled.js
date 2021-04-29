@@ -19,6 +19,7 @@ export const StatsContainer = styled.div`
   font-size: small;
   display: flex;
   justify-content: space-around;
+  align-items: center;
 `;
 
 export const StatElement = styled.span`

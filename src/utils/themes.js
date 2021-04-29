@@ -3,6 +3,8 @@ const general = {
   dark: 'rgb(24,24,24)',
   DustyBlue: '#35434d',
   DarkBlue: '#15232D',
+  warning1: '#ffc600',
+  lightGray: '#A9A9A9',
 };
 
 const lightTheme = {

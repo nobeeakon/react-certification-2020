@@ -44,4 +44,28 @@ describe('useGlobalReducer custom useReducer hook', () => {
       expect(modifiedState.searchTerm).toBe('newTerm');
     });
   });
+
+  describe('LogIn & LogOut', () => {
+    it('should be true, when logged In ', () => {
+      const { result } = renderHook(() => useGlobalReducer());
+      const [initialState, dispatchGlobal] = result.current;
+
+      expect(initialState.isAuthenticated).toBe(false);
+      expect(initialState.userInfo).toBeNull();
+
+      const userInfo = {};
+      act(() => {
+        dispatchGlobal({ type: ACTIONS.LOGIN, payload: userInfo });
+      });
+      const [loggedInState] = result.current;
+      expect(loggedInState.isAuthenticated).toBe(true);
+      expect(loggedInState.userInfo).toStrictEqual(userInfo);
+
+      act(() => {
+        dispatchGlobal({ type: ACTIONS.LOGOUT });
+      });
+      const [loggedOutState] = result.current;
+      expect(loggedOutState.isAuthenticated).toBe(false);
+    });
+  });
 });

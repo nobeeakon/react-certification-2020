@@ -7,12 +7,9 @@ import RelatedVideos from './RelatedVideos.component';
 
 import useVideos from '../../../utils/hooks/useVideos';
 
-import { REQUEST_API_TYPES } from '../../../utils/constants';
-
 jest.mock('../../../utils/hooks/useVideos');
 
 describe('Testing RelatedVideos component', () => {
-  const REQ_TYPE = REQUEST_API_TYPES.SEARCH_RELATED_VIDEOS;
   const relatedToVideoId = 'videoId';
   describe('Testing RelatedVideos rendering', () => {
     it('Should display loading message, when isLoading is true', () => {
@@ -24,11 +21,11 @@ describe('Testing RelatedVideos component', () => {
     });
 
     it('Should return null, when videoList is null and isLoading is false', () => {
-      useVideos.mockReturnValueOnce({ videoList: null, isLoading: false });
+      useVideos.mockReturnValueOnce({ videoList: [], isLoading: false, error: true });
 
-      const { container } = render(<RelatedVideos relatedToVideoId={relatedToVideoId} />);
+      const { getByText } = render(<RelatedVideos relatedToVideoId={relatedToVideoId} />);
 
-      expect(container).toBeEmptyDOMElement();
+      expect(getByText(/something went wrong/i)).toBeInTheDocument();
     });
 
     it('should display "No Video Found" when result is empty array and isLoading is false', async () => {
@@ -102,7 +99,6 @@ describe('Testing RelatedVideos component', () => {
         <RelatedVideos relatedToVideoId={relatedToVideoId} />
       );
 
-      expect(useVideos).toBeCalledWith(relatedToVideoId, REQ_TYPE);
       expect(getByText(/title2/i)).toBeInTheDocument();
     });
   });

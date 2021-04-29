@@ -7,28 +7,24 @@ import VideoList from './VideoList.component';
 
 import useVideos from '../../../utils/hooks/useVideos';
 
-import { REQUEST_API_TYPES } from '../../../utils/constants';
-
 jest.mock('../../../utils/hooks/useVideos');
 
 describe('Testing VideoList', () => {
-  const REQ_TYPE = REQUEST_API_TYPES.SEARCH_BY_TERM;
-
   describe('Testing CardList rendering', () => {
     it('Should display loading message, when isLoading is true', () => {
-      useVideos.mockReturnValueOnce({ videoList: null, isLoading: true });
+      useVideos.mockReturnValueOnce({ videoList: [], isLoading: true });
 
-      const { container } = render(<VideoList />);
+      const { getByText } = render(<VideoList />);
 
-      expect(container).toHaveTextContent(/loading/i);
+      expect(getByText(/loading/i)).toBeInTheDocument();
     });
 
-    it('Should return null, when videoList is null and isLoading is false', () => {
-      useVideos.mockReturnValueOnce({ videoList: null, isLoading: false });
+    it('Should show "something went wrong", when error is true', () => {
+      useVideos.mockReturnValueOnce({ videoList: [], isLoading: false, error: true });
 
-      const { container } = render(<VideoList />);
+      const { getByText } = render(<VideoList />);
 
-      expect(container).toBeEmptyDOMElement();
+      expect(getByText(/somethig went wrong/i)).toBeInTheDocument();
     });
 
     it('should display "No Video Found" when result is empty array and isLoading is false', async () => {
@@ -97,7 +93,6 @@ describe('Testing VideoList', () => {
         <VideoList searchString={searchString} />
       );
 
-      expect(useVideos).toBeCalledWith(searchString, REQ_TYPE);
       expect(getByText(/title1/i)).toBeInTheDocument();
       expect(getByText(/title2/i)).toBeInTheDocument();
     });

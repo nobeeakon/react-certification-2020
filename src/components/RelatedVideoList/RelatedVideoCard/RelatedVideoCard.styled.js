@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 
-import StyledLink from '../../StyledComponents/StyledLink';
 import * as breakpoints from '../../../utils/deviceBreakpoints';
 
 const transition = '0.06s ease';
@@ -8,16 +7,15 @@ const transition = '0.06s ease';
 export const Overlay = styled.div`
   position: absolute;
   display: flex;
-  justify-content: center;
-  align-items: center;
-
+  justify-content: flex-end;
+  align-items: flex-end;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
   opacity: 0;
   transition: ${transition};
-  background-color: #222729;
+
   padding: 10px;
 
   color: ${(props) => props.theme.general.light};
@@ -26,8 +24,23 @@ export const Overlay = styled.div`
 
   & * {
     width: 40%;
+    height: 50%;
+  }
+
+  ${(props) =>
+    props.isNotAvailable &&
+    `
+    & * {
+    width: 40%;
     height: 40%;
   }
+      justify-content: center;
+      align-items: center;
+    `}
+`;
+
+export const WatchLaterButtonContainer = styled.div`
+  color: blue;
 `;
 
 // Video Card container
@@ -107,8 +120,9 @@ export const ExtraInfoDiv = styled.div`
   bottom: 0;
 `;
 
-// Author, should be placed within ExtraInfoDiv
-export const ChannelTitle = styled(StyledLink)`
+// channelTitle, should be placed within ExtraInfoDiv
+export const ChannelTitle = styled.div`
+  color: ${(props) => props.theme.contrast2};
   font-style: italic;
   font-size: x-small;
 `;

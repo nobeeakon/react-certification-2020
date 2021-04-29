@@ -19,8 +19,10 @@ export const VideoContainer = styled.div`
   }
 `;
 
-export const NoVideoFound = styled.div`
+export const Message = styled.div`
+  color: ${(props) => props.theme.contrast2};
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-grow: 1;
 `;

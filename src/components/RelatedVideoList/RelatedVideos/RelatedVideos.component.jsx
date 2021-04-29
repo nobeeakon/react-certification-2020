@@ -1,44 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { VideoContainer, NoVideoFound } from './RelatedVideos.styled';
-import RelatedVideoCard from '../RelatedVideoCard';
-
 import useVideos from '../../../utils/hooks/useVideos';
 
-import getVideoKey from '../../../utils/functions/getVideoKey';
+import RelatedVideosPresenter from './RelatedVideos.presenter';
 
 import { REQUEST_API_TYPES } from '../../../utils/constants';
 
+import * as Styled from './RelatedVideos.styled';
+
+import useIsMountedRef from '../../../utils/hooks/useIsMountedRef';
+
+const REQ_TYPE = REQUEST_API_TYPES.SEARCH_RELATED_VIDEOS;
+
 const RelatedVideos = ({ relatedToVideoId }) => {
-  const REQ_TYPE = REQUEST_API_TYPES.SEARCH_RELATED_VIDEOS;
-  const { videoList, isLoading } = useVideos(relatedToVideoId, REQ_TYPE);
-
-  if (isLoading) return <NoVideoFound>Loading...</NoVideoFound>;
-  if (!videoList) return null;
-
-  return (
-    <div>
-      {videoList.length === 0 ? (
-        <NoVideoFound> No Video Found :( </NoVideoFound>
-      ) : (
-        <VideoContainer>
-          {videoList
-            .filter((video) => video?.id?.videoId)
-            .map((video) => (
-              <RelatedVideoCard
-                isAvailable={!!video?.snippet}
-                videoId={video.id.videoId}
-                key={getVideoKey(video)}
-                thumbUrl={video?.snippet?.thumbnails?.default?.url}
-                title={video?.snippet?.title}
-                channelTitle={video?.snippet?.channelTitle}
-              />
-            ))}
-        </VideoContainer>
-      )}
-    </div>
+  const isMountedRef = useIsMountedRef();
+  const { videoList, isLoading, error } = useVideos(
+    relatedToVideoId,
+    REQ_TYPE,
+    isMountedRef
   );
+
+  if (isLoading) return <Styled.Message>Loading...</Styled.Message>;
+  if (error) return <Styled.Message>Something went wrong :( </Styled.Message>;
+
+  return <RelatedVideosPresenter videoList={videoList} />;
 };
 
 RelatedVideos.propTypes = {
